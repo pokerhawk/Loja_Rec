@@ -12,15 +12,31 @@
         <canvas id="canvas" width="800" height="800"></canvas>
         <p id="pessoa_reconhecida">asd</p>
     </div> -->
-    <form>
-        <label>Nome</label>
-        <input type="text" name="nome" id="login_input" placeholder="Nome">
-        <label>Senha</label>
-        <input type="password" name="senha" id="senha_input" placeholder="Senha">
-        <!-- <input type="submit" value="Enviar" onclick="conferir()"> -->
-        <button type="button" onclick="conferir()">Enviar</button>
-        <p id="resposta_dividendo"></p>
-    </form>
+    <div id="divProdutos">
+        <h2>Produtos</h2>
+        <!-- <ul id="produtos"></ul> -->
+    </div>
+    <div>
+        <h2>Carrinho</h2>
+        <input type="text" id="codigo_produto" placeholder="Codigo do Produto">
+        <input type="text" id="quantidade_produto" placeholder="Quantidade">
+        <button type="button" onclick="adicionarCarrinho()">Enviar</button>
+        <div >
+            <ul id="carrinho"></ul>
+        </div>
+    </div>
+    <div id="formulario_divida">
+        <form>
+            <h1>Quer conferir quanto deve?</h1>
+            <label>Nome</label>
+            <input type="text" name="nome" id="login_input" placeholder="Nome">
+            <label>Senha</label>
+            <input type="password" name="senha" id="senha_input" placeholder="Senha">
+            <!-- <input type="submit" value="Enviar" onclick="conferir()"> -->
+            <button type="button" onclick="conferirDivida()">Enviar</button>
+            <p id="resposta_dividendo">Dívida</p>
+        </form>
+    </div>
     <script src="./script.js"></script>
 </body>
 </html>

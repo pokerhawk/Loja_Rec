@@ -5,3 +5,10 @@ html{
 #canvas {
     background-color: darkblue;
 }
+
+#formulario_divida{
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    padding: 2% 4%;
+}
