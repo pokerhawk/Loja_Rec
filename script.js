@@ -1,6 +1,6 @@
-let contador = 0; // CHANGE THIS
+let contador = 0; // CHANGE/REMOVE THIS
 
-const lista_de_participantes = [
+const lista_de_participantes = [ //PLACEHOLDER
   {
     login: "eliabe",
     senha: "123",
@@ -13,7 +13,7 @@ const lista_de_participantes = [
   },
 ];
 
-const lista_de_produtos = [
+const lista_de_produtos = [ //PLACEHOLDER
   {
     codigo: "0001",
     produto: "caixinha",
