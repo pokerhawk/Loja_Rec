@@ -1,4 +1,4 @@
-let contador = 0;
+let contador = 0; // CHANGE THIS
 
 const lista_de_participantes = [
   {
@@ -61,7 +61,7 @@ function removerCarrinho(){
   divCarrinho.removeChild(carrinho);
 }
 
-function atualizarCarrinho() {
+function atualizarCarrinho() { // CHANGE COUNTER, FIX VARIABLES, FIND BETTER WAY TO DO ALL THIS
   if(!document.getElementById("carrinho")){
     const divCarrinho = document.getElementById("divCarrinho");
     const ul = document.createElement("ul");
@@ -78,7 +78,7 @@ function atualizarCarrinho() {
       const text = document.createTextNode(`${contador} ${lista_de_produtos[i].produto}`);
       const textVerifica = `${contador-quantidade_produto} ${lista_de_produtos[i].produto}`;
       const pnc = document.getElementsByClassName("produtos_no_carrinho");
-      for(i in pnc){ // FIX THIS SHEEEET
+      for(i in pnc){ // FIX NEEDED
         if(pnc[i].innerText == textVerifica){
           pnc[i].innerText = `${contador} ${lista_de_produtos[i].produto}`;
           break;
