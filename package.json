@@ -4,7 +4,8 @@
   "description": "",
   "main": "script.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon script.js"
   },
   "repository": {
     "type": "git",
@@ -17,6 +18,6 @@
   },
   "homepage": "https://github.com/pokerhawk/loja-de-produtos#readme",
   "dependencies": {
-    "nodemon": "^2.0.20"
+    "mysql": "^2.18.1"
   }
 }

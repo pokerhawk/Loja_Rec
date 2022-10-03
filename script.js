@@ -47,6 +47,7 @@ function atualizarProdutos(){
     produtos.appendChild(li)
   }
 }
+
 atualizarProdutos();
 
 function removerProdutos(){
@@ -55,7 +56,7 @@ function removerProdutos(){
   divProdutos.removeChild(produtos)
 }
 
-function removerCarrinho(){
+function removerCarrinho(){ // NOT BEING USED
   const divCarrinho = document.getElementById("divCarrinho");
   const carrinho = document.getElementById("carrinho");
   divCarrinho.removeChild(carrinho);
