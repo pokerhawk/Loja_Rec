@@ -1,0 +1,27 @@
+{
+  "name": "lojabe",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pokerhawk/lojaBE.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pokerhawk/lojaBE/issues"
+  },
+  "homepage": "https://github.com/pokerhawk/lojaBE#readme",
+  "dependencies": {
+    "express": "^4.18.1",
+    "knex": "^2.3.0",
+    "mysql": "^2.18.1",
+    "nodemon": "^2.0.20",
+    "pg-promise": "^10.12.0"
+  }
+}
