@@ -1,3 +1,5 @@
+const cadastro_nome = document.getElementById('cadastro_nome'); // make function
+const cadastro_senha = document.getElementById('cadastro_senha');
 let contador = 0; // CHANGE/REMOVE THIS
 
 const lista_de_participantes = [ //PLACEHOLDER
@@ -34,7 +36,7 @@ const lista_de_produtos = [ //PLACEHOLDER
   }
 ];
 
-function atualizarProdutos(){
+const  atualizarProdutos = () =>{
   const divProdutos = document.getElementById("divProdutos");
   const ul = document.createElement("ul");
   ul.setAttribute('id','produtos')
@@ -47,22 +49,21 @@ function atualizarProdutos(){
     produtos.appendChild(li)
   }
 }
-
 atualizarProdutos();
 
-function removerProdutos(){
+const removerProdutos = () =>{
   const divProdutos = document.getElementById("divProdutos");
   const produtos = document.getElementById("produtos");
   divProdutos.removeChild(produtos)
 }
 
-function removerCarrinho(){ // NOT BEING USED
+const removerCarrinho = () =>{ // NOT BEING USED
   const divCarrinho = document.getElementById("divCarrinho");
   const carrinho = document.getElementById("carrinho");
   divCarrinho.removeChild(carrinho);
 }
 
-function atualizarCarrinho() { // CHANGE COUNTER, FIX VARIABLES, FIND BETTER WAY TO DO ALL THIS
+const atualizarCarrinho = () => { // CHANGE COUNTER, FIX VARIABLES, FIND BETTER WAY TO DO ALL THIS
   if(!document.getElementById("carrinho")){
     const divCarrinho = document.getElementById("divCarrinho");
     const ul = document.createElement("ul");
@@ -89,7 +90,7 @@ function atualizarCarrinho() { // CHANGE COUNTER, FIX VARIABLES, FIND BETTER WAY
           li.appendChild(text);
           carrinho.appendChild(li)
           break;
-        } // WE NEED TO RESET COUNTER: DO AN IF CONDITION TO RESET IT WHEN THEN CODE OF THE PRODUCT CHANGES LIKE A ONCHANGE
+        } // WE NEED TO RESET COUNTER: DO AN IF CONDITION TO RESET IT WHEN THE CODE OF THE PRODUCT CHANGES LIKE A ONCHANGE
       }
       break;
     }
@@ -98,27 +99,39 @@ function atualizarCarrinho() { // CHANGE COUNTER, FIX VARIABLES, FIND BETTER WAY
   atualizarProdutos()
 }
 
-const conferirDivida = () => {
+const conferirDivida = async () => {
+  const response = await fetch('http:/localhost:3000/')
+  const result = await response.json();
   const login = document.getElementById("login_input").value;
   const senha = document.getElementById("senha_input").value;
   let divida = document.getElementById("resposta_dividendo");
-  for (i in lista_de_participantes) {
-    if (
-      login == lista_de_participantes[i].login &&
-      senha == lista_de_participantes[i].senha
-    ) {
-      divida.innerText = `${lista_de_participantes[i].login} você está devendo ${lista_de_participantes[i].divida}R$`;
+  for(i in result){
+    if(login == result[i].nome && senha == result[i].senha){
+      divida.innerText = `${result[i].nome} você está devendo R$${result[i].divida}`;
       break;
     }
   }
 };
 
-document.getElementById("senha_input").addEventListener("keydown", function(event){ //se der enter na senha
+const cadastrar = async () =>{
+  const response = await fetch('http:/localhost:3000/',{
+    method: 'post'
+  })
+  const result = await response.json();
+  console.log(result[0])
+}
+
+document.getElementById("senha_input").addEventListener("keydown", function(event){
   if(event.key == "Enter"){
     conferirDivida()
   }
 })
 
+const getData = async () => {
+  const response = await fetch('https://jsonplaceholder.typicode.com/todos/')
+  const result = await response.json();
+  console.log(result)
+}
+
 //PARTE DE TESTES
 //
-

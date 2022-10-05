@@ -8,33 +8,41 @@
     <title>Reconhecimento de compra</title>
 </head>
 <body>
+    <form action="" method="get">
+        <h1>Cadastre-se</h1>
+        <input type="text" placeholder="Nome" id="cadastro_nome">
+        <input type="password" placeholder="Senha" id="cadastro_senha">
+        <button type="button" onclick="cadastrar()">Enviar</button>
+    </form>
     <!-- <div>
         <canvas id="canvas" width="800" height="800"></canvas>
         <p id="pessoa_reconhecida">asd</p>
     </div> -->
-    <div id="divProdutos">
-        <h2>Produtos</h2>
-    </div>
-    <div>
-        <h2>Carrinho</h2>
-        <input type="text" id="codigo_produto" placeholder="Codigo do Produto">
-        <input type="text" id="quantidade_produto" placeholder="Quantidade">
-        <button type="button" onclick="atualizarCarrinho()">Enviar</button>
-        <div id="divCarrinho">
+    <main>
+        <div id="divProdutos">
+            <h2>Produtos</h2>
         </div>
-    </div>
-    <div id="formulario_divida">
-        <form>
-            <h1>Quer conferir quanto deve?</h1>
-            <label>Nome</label>
-            <input type="text" name="nome" id="login_input" placeholder="Nome">
-            <label>Senha</label>
-            <input type="password" name="senha" id="senha_input" placeholder="Senha">
-            <!-- <input type="submit" value="Enviar" onclick="conferir()"> -->
-            <button type="button" onclick="conferirDivida()">Enviar</button>
-            <p id="resposta_dividendo">Dívida</p>
-        </form>
-    </div>
+        <div>
+            <h2>Carrinho</h2>
+            <input type="text" id="codigo_produto" placeholder="Codigo do Produto">
+            <input type="text" id="quantidade_produto" placeholder="Quantidade">
+            <button type="button" onclick="atualizarCarrinho()">Enviar</button>
+            <div id="divCarrinho">
+            </div>
+        </div>
+        <div id="formulario_divida">
+            <form>
+                <h1>Quer conferir quanto deve?</h1>
+                <label>Nome</label>
+                <input type="text" name="nome" id="login_input" placeholder="Nome">
+                <label>Senha</label>
+                <input type="password" name="senha" id="senha_input" placeholder="Senha">
+                <!-- <input type="submit" value="Enviar" onclick="conferir()"> -->
+                <button type="button" onclick="conferirDivida()">Enviar</button>
+                <p id="resposta_dividendo">Dívida</p>
+            </form>
+        </div>
+    </main>
     <script src="./script.js"></script>
 </body>
 </html>

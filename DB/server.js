@@ -13,11 +13,15 @@ const knex = require('knex')({
   }
 });
 
+const display = [];
+
 app.use(cors())
 app.use(express.json())
-//////////////////////////////////////
+
+////////////////////////////////////// SERVER
 app.get('/', (req, res)=>{
   knex.select('*').from('users').then(data=>{
+    display.push(data)
     res.json(data)
   }).catch(error=>{console.log(error)})
 })
@@ -36,22 +40,16 @@ app.post('/', (req, res)=>{
   .catch(err=>{console.log(err)})
 })
 
-app.delete('/', (req, res)=>{ // CHECK
-  knex('users').dropColumn().where('nome', 'joao');
-  knex('users').where('nome', 'joao').del()
-  .then(res=>{console.log(res)})
-  .catch(err=>{console.log(err)})
-})
+// app.delete('/', (req, res)=>{ // CHECK
+//   knex('users').dropColumn().where('nome', 'joao');
+//   knex('users').where('nome', 'joao').del()
+//   .then(res=>{console.log(res)})
+//   .catch(err=>{console.log(err)})
+// })
 
 
 
-
-
-
-
-
-
-//////////////////////////////////////
+////////////////////////////////////// CONSOLE LOG DISPLAYS
 knex.select('*').from('users').then(data=>{
   console.log(data)
 }).catch(error=>{console.log(error)})
@@ -68,19 +66,10 @@ knex.select('*').from('users').where({
 // })
 
 
-
-
-
-
-
-
-
-
-
 //////////////////////////////////////
-app.get('/', function (req, res) {
-  res.send('Hello World')
-})
+app.get("/", (req, res) => {
+  res.json(display); //WHAT WILL BE DISPLAYED ON BROWSER
+});
 
 app.listen(port, ()=>{
   console.log(`Server running at https:localhost:${port}`)
