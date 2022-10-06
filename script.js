@@ -2,20 +2,6 @@ const cadastro_nome = document.getElementById("cadastro_nome"); // make function
 const cadastro_senha = document.getElementById("cadastro_senha");
 let contador = 0; // CHANGE/REMOVE THIS
 
-const lista_de_participantes = [
-  //PLACEHOLDER
-  {
-    login: "eliabe",
-    senha: "123",
-    divida: 20.5,
-  },
-  {
-    login: "lizuly",
-    senha: "123",
-    divida: 10.0,
-  },
-];
-
 const lista_de_produtos = [
   //PLACEHOLDER
   {
