@@ -12,19 +12,15 @@ const knex = require("knex")({
     database: "loja",
   },
 });
-
-const display = [];
-
 app.use(cors());
 app.use(express.json());
-
 ////////////////////////////////////// SERVER
-app.get("/", (req, res) => {
+
+app.get("/divida", (req, res) => {
   knex
     .select("*")
     .from("users")
     .then((data) => {
-      display.push(data);
       res.json(data);
     })
     .catch((error) => {
@@ -32,7 +28,26 @@ app.get("/", (req, res) => {
     });
 });
 
-app.post("/post", async (req, res) => {
+app.get("/produtos", (req, res)=>{
+  knex.select("*").from("produtos")
+  .then(data=>{
+    res.json(data)
+  })
+  .catch(err=>{
+    console.log(err)
+  })
+})
+
+app.put("/carrinho", async (req, res)=>{
+  const { ID_prod, quantidade_prod } = req.body;
+  knex("produtos").where("ID", ID_prod).update({
+    quantidade: quantidade_prod
+  })
+  .then(res.json("Banco Atualizado"))
+  .catch(err=>{res.json(`ERROR: ${err}`)})
+})
+
+app.post("/cadastro", async (req, res) => {
   const { nome, senha } = req.body;
   if (!nome || !senha) {
     return res.status(400).json("Dados incorretos!");
@@ -55,24 +70,8 @@ app.post("/post", async (req, res) => {
     });
 });
 
-app.post("/cadastro", (req, res) => {
-  knex
-    .transaction((trx) => {
-      trx.insert({
-        nome: "joao",
-        senha: "321",
-        divida: 5,
-      });
-    })
-    .then((res) => {
-      console.log(res);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-});
 
-// app.delete('/', (req, res)=>{ // CHECK
+// app.delete('/deletarUsuario', (req, res)=>{ // CHECK
 //   knex('users').dropColumn().where('nome', 'joao');
 //   knex('users').where('nome', 'joao').del()
 //   .then(res=>{console.log(res)})
@@ -99,15 +98,6 @@ knex
   .then((data) => {
     console.log(data);
   });
-
-// knex.schema.alterTable('users',table=>{
-//   table.add;
-// })
-
-//////////////////////////////////////
-app.get("/", (req, res) => {
-  res.json(display); //WHAT WILL BE DISPLAYED ON BROWSER
-});
 
 app.listen(port, () => {
   console.log(`Server running at https:localhost:${port}`);

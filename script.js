@@ -1,39 +1,15 @@
-const cadastro_nome = document.getElementById("cadastro_nome"); // make function
-const cadastro_senha = document.getElementById("cadastro_senha");
-let contador = 0; // CHANGE/REMOVE THIS
-
-const lista_de_produtos = [
-  //PLACEHOLDER
-  {
-    codigo: "0001",
-    produto: "caixinha",
-    preco: 13.2,
-    quantidade: 13,
-  },
-  {
-    codigo: "0002",
-    produto: "livro",
-    preco: 10.9,
-    quantidade: 4,
-  },
-  {
-    codigo: "0003",
-    produto: "caderno",
-    preco: 15.9,
-    quantidade: 7,
-  },
-];
-
-const atualizarProdutos = () => {
+const atualizarProdutos = async () => { //talvez mudar
   const divProdutos = document.getElementById("divProdutos");
   const ul = document.createElement("ul");
   ul.setAttribute("id", "produtos");
   divProdutos.appendChild(ul);
-  for (i in lista_de_produtos) {
+  const response = await fetch("http:/localhost:3000/produtos")
+  const result = await response.json();
+  for(i in result){
     const produtos = document.getElementById("produtos");
     const li = document.createElement("li");
     const text = document.createTextNode(
-      `${lista_de_produtos[i].quantidade} ${lista_de_produtos[i].produto} - ${lista_de_produtos[i].preco}R$ / Codigo do Produto: ${lista_de_produtos[i].codigo}`
+      `${result[i].quantidade} ${result[i].produto} - ${result[i].preco}R$ / ID do Produto: ${result[i].ID}`
     );
     li.appendChild(text);
     produtos.appendChild(li);
@@ -54,53 +30,64 @@ const removerCarrinho = () => {
   divCarrinho.removeChild(carrinho);
 };
 
-const atualizarCarrinho = () => {
-  // CHANGE COUNTER, FIX VARIABLES, FIND BETTER WAY TO DO ALL THIS
+const atualizarCarrinho = async () =>{ ///NEED TO FIX THIS ///
   if (!document.getElementById("carrinho")) {
     const divCarrinho = document.getElementById("divCarrinho");
     const ul = document.createElement("ul");
     ul.setAttribute("id", "carrinho");
     divCarrinho.appendChild(ul);
   }
-  const codigo_produto = document.getElementById("codigo_produto").value;
-  const quantidade_produto = Number(
-    document.getElementById("quantidade_produto").value
-  );
+  const id_produto = document.getElementById("id_produto").value;
+  const quantidade_produto = document.getElementById("quantidade_produto").value;
   const carrinho = document.getElementById("carrinho");
-  for (i in lista_de_produtos) {
-    if (codigo_produto == lista_de_produtos[i].codigo) {
-      lista_de_produtos[i].quantidade =
-        lista_de_produtos[i].quantidade - quantidade_produto;
-      contador += quantidade_produto;
+  const response_info = await fetch("http:/localhost:3000/produtos")
+  const result_info = await response_info.json();
+  let dbContador = 0;
+  for(i in result_info){
+    if(result_info[i].ID == id_produto){
+      dbContador = Number(result_info[i].quantidade - quantidade_produto);
       const text = document.createTextNode(
-        `${contador} ${lista_de_produtos[i].produto}`
+        `${quantidade_produto} ${result_info[i].produto}`
       );
-      const textVerifica = `${contador - quantidade_produto} ${
-        lista_de_produtos[i].produto
-      }`;
-      const pnc = document.getElementsByClassName("produtos_no_carrinho");
-      for (i in pnc) {
-        // FIX NEEDED
-        if (pnc[i].innerText == textVerifica) {
-          pnc[i].innerText = `${contador} ${lista_de_produtos[i].produto}`;
-          break;
-        } else {
-          const li = document.createElement("li");
-          li.setAttribute("class", "produtos_no_carrinho");
-          li.appendChild(text);
-          carrinho.appendChild(li);
-          break;
-        } // WE NEED TO RESET COUNTER: DO AN IF CONDITION TO RESET IT WHEN THE CODE OF THE PRODUCT CHANGES LIKE A ONCHANGE
+      if(document.getElementsByClassName("produtos_no_carrinho")){
+        const prods_carrinho = document.getElementsByClassName("produtos_no_carrinho");
+        for (i in prods_carrinho) {
+          console.log(prods_carrinho.item(i))
+          let splitNumero = (prods_carrinho[i].innerText).split(' ');
+          const textVerifica = `${splitNumero[0]} ${result_info[i].produto}`;
+          if (prods_carrinho[i].innerText == textVerifica) {
+            Number(splitNumero += quantidade_produto);
+            prods_carrinho[i].innerText = `${splitNumero} ${result_info[i].produto}`;
+            break;
+          }
+        }
+      } else {
+        const li = document.createElement("li");
+        li.setAttribute("class", "produtos_no_carrinho");
+        li.appendChild(text);
+        carrinho.appendChild(li);
+        break;
       }
-      break;
     }
   }
+  const response = await fetch("http:/localhost:3000/carrinho", {
+    method: "put",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      ID_prod: id_produto,
+      quantidade_prod: dbContador
+    }),
+  });
+  const result = await response.json();
+  console.log(result);
+  // dbContador = 0;
   removerProdutos();
   atualizarProdutos();
-};
+}
 
-const conferirDivida = async () => {
-  const response = await fetch("http:/localhost:3000/");
+///////////////////////FINE//////////////////////////
+const conferirDivida = async () => { 
+  const response = await fetch("http:/localhost:3000/divida");
   const result = await response.json();
   const login = document.getElementById("login_input").value;
   const senha = document.getElementById("senha_input").value;
@@ -116,7 +103,7 @@ const conferirDivida = async () => {
 const cadastrar = async () => {
   const cadastro_nome = document.getElementById("cadastro_nome").value;
   const cadastro_senha = document.getElementById("cadastro_senha").value;
-  const response = await fetch("http:/localhost:3000/post", {
+  const response = await fetch("http:/localhost:3000/cadastro", {
     method: "post",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
@@ -137,8 +124,7 @@ document
     }
   });
 
-const getData = async () => {
-  //TESTE: DELETAR DEPOIS
+const getData = async () => { //TESTE: DELETAR DEPOIS
   const response = await fetch("https://jsonplaceholder.typicode.com/todos/");
   const result = await response.json();
   console.log(result);
