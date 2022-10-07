@@ -52,7 +52,7 @@ const atualizarCarrinho = async () =>{ ///NEED TO FIX THIS ///
       if(document.getElementsByClassName("produtos_no_carrinho")){
         const prods_carrinho = document.getElementsByClassName("produtos_no_carrinho");
         for (i in prods_carrinho) {
-          console.log(prods_carrinho.item(i))
+          console.log(prods_carrinho.item(i)) //VERIFICAR SE ISSO DA CERTO PARA A PROXIMA LINHA
           let splitNumero = (prods_carrinho[i].innerText).split(' ');
           const textVerifica = `${splitNumero[0]} ${result_info[i].produto}`;
           if (prods_carrinho[i].innerText == textVerifica) {
@@ -80,7 +80,7 @@ const atualizarCarrinho = async () =>{ ///NEED TO FIX THIS ///
   });
   const result = await response.json();
   console.log(result);
-  // dbContador = 0;
+  // dbContador = 0; TESTAR PARA VER SE PRECISA RESETAR CONTADOR OU NÃO
   removerProdutos();
   atualizarProdutos();
 }
