@@ -24,10 +24,14 @@
         </div>
         <div>
             <h2>Carrinho</h2>
+            <label for="">ID do Produto:</label>
             <input type="text" id="id_produto" placeholder="ID do Produto">
+            <br>
+            <label for="">Quantidade:</label>
             <input type="text" id="quantidade_produto" placeholder="Quantidade">
+            <br>
             <button type="button" onclick="atualizarCarrinho()">Enviar</button>
-            <div id="divCarrinho">
+            <div id="carrinho">
             </div>
         </div>
         <button type="button" onclick="">COMPRAR</button>
@@ -36,8 +40,10 @@
                 <h1>Quer conferir quanto deve?</h1>
                 <label>Nome</label>
                 <input type="text" name="nome" id="login_input" placeholder="Nome">
+                <br>
                 <label>Senha</label>
                 <input type="password" name="senha" id="senha_input" placeholder="Senha">
+                <br>
                 <!-- <input type="submit" value="Enviar" onclick="conferir()"> -->
                 <button type="button" onclick="conferirDivida()">Enviar</button>
                 <p id="resposta_dividendo">Dívida</p>

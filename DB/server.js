@@ -28,24 +28,30 @@ app.get("/divida", (req, res) => {
     });
 });
 
-app.get("/produtos", (req, res)=>{
-  knex.select("*").from("produtos")
-  .then(data=>{
-    res.json(data)
-  })
-  .catch(err=>{
-    console.log(err)
-  })
-})
+app.get("/produtos", (req, res) => {
+  knex
+    .select("*")
+    .from("produtos")
+    .then((data) => {
+      res.json(data);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+});
 
-app.put("/carrinho", async (req, res)=>{
+app.put("/carrinho", async (req, res) => {
   const { ID_prod, quantidade_prod } = req.body;
-  knex("produtos").where("ID", ID_prod).update({
-    quantidade: quantidade_prod
-  })
-  .then(res.json("Banco Atualizado"))
-  .catch(err=>{res.json(`ERROR: ${err}`)})
-})
+  knex("produtos")
+    .where("ID", ID_prod)
+    .update({
+      quantidade: quantidade_prod,
+    })
+    .then(res.json("Banco Atualizado"))
+    .catch((err) => {
+      res.json(`ERROR: ${err}`);
+    });
+});
 
 app.post("/cadastro", async (req, res) => {
   const { nome, senha } = req.body;
@@ -69,7 +75,6 @@ app.post("/cadastro", async (req, res) => {
       console.log(err);
     });
 });
-
 
 // app.delete('/deletarUsuario', (req, res)=>{ // CHECK
 //   knex('users').dropColumn().where('nome', 'joao');
@@ -102,4 +107,3 @@ knex
 app.listen(port, () => {
   console.log(`Server running at https:localhost:${port}`);
 });
-
