@@ -37,8 +37,7 @@ const atualizarCarrinho = async () => {
   const carrinho = document.querySelector("#carrinho");
   const response_info = await fetch("http:/localhost:3000/produtos");
   const result_info = await response_info.json();
-  let dbContador = 0; 
-  console.log(result_info)
+  let dbContador = 0;
   for (i in result_info) {
     if (result_info[i].ID == id_produto) {
       dbContador = Number(result_info[i].quantidade - quantidade_produto);
@@ -50,22 +49,24 @@ const atualizarCarrinho = async () => {
         carrinho.appendChild(itemLista);
       } else{
         for(let i = 0; i < document.getElementsByClassName("itemLista").length; i++){
-          let itens = document.getElementsByClassName("itemLista").item(i).innerText;
-          const oldProduto = itens.split(" ")[1]
-          let verificaNumero = Number(itens.split(" ")[0]);
-          result_info[i].produto
-          if(oldProduto == result_info[i].produto){ //PROBLEM IS RIGHT HERE!!!!
-            verificaNumero += Number(quantidade_produto);
-            itens = `${verificaNumero} ${result_info[i].produto}`;
-          } 
-          if (i == Number(document.getElementsByClassName("itemLista").length - 1)) {
+          const itens = document.getElementsByClassName("itemLista").item(i);
+          const oldProduto = itens.innerText.split(" ")[1]
+          let verificaNumero = Number(itens.innerText.split(" ")[0]);
+          let adicionaValor = verificaNumero + Number(quantidade_produto);
+          console.log(oldProduto, result_info[i].produto)
+          if(oldProduto == result_info[i].produto){ //PROBLEM IS RIGHT HERE!!!! this if condition
+            itens.innerText = `${adicionaValor} ${result_info[i].produto}`;
+            console.log("PRIMEIRO IF ATIVADO")
+            break;
+          } else {
             const itemLista = document.createElement("p");
             itemLista.setAttribute("class", "itemLista");
             const textNode = document.createTextNode(`${quantidade_produto} ${result_info[i].produto}`)
             itemLista.appendChild(textNode);
             carrinho.appendChild(itemLista);
+            console.log("SEGUNDO IF ATIVADO")
+            break;
           }
-          console.log(i)
         }
 
       }
