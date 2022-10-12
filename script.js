@@ -10,7 +10,7 @@ const atualizarProdutos = async () => {
     const produtos = document.getElementById("produtos");
     const li = document.createElement("li");
     const text = document.createTextNode(
-      `${result[i].quantidade} ${result[i].produto} - ${result[i].preco}R$ / ID do Produto: ${result[i].ID}`
+      `${result[i].quantidade} ${result[i].produto} - ${result[i].preco}R$ | ID do Produto: ${result[i].ID}`
     );
     li.appendChild(text);
     produtos.appendChild(li);
@@ -39,7 +39,7 @@ const atualizarCarrinho = async () => {
   const result_info = await response_info.json();
   let dbContador = 0;
   for (i in result_info) {
-    if (result_info[i].ID == id_produto) {
+    if (result_info[i].ID == Number(id_produto)) {
       dbContador = Number(result_info[i].quantidade - quantidade_produto);
       if (document.getElementsByClassName("itemLista").length == 0){
         const itemLista = document.createElement("p");
@@ -48,23 +48,21 @@ const atualizarCarrinho = async () => {
         itemLista.appendChild(textNode);
         carrinho.appendChild(itemLista);
       } else{
-        for(let i = 0; i < document.getElementsByClassName("itemLista").length; i++){
-          const itens = document.getElementsByClassName("itemLista").item(i);
+        for(let j = 0; j < document.getElementsByClassName("itemLista").length; j++){
+          const itens = document.getElementsByClassName("itemLista").item(j);
           const oldProduto = itens.innerText.split(" ")[1]
           let verificaNumero = Number(itens.innerText.split(" ")[0]);
           let adicionaValor = verificaNumero + Number(quantidade_produto);
-          console.log(oldProduto, result_info[i].produto)
-          if(oldProduto == result_info[i].produto){ //PROBLEM IS RIGHT HERE!!!! this if condition
+          if(oldProduto == result_info[i].produto){
             itens.innerText = `${adicionaValor} ${result_info[i].produto}`;
-            console.log("PRIMEIRO IF ATIVADO")
             break;
-          } else {
+          } 
+          if (j == document.getElementsByClassName("itemLista").length-1) {
             const itemLista = document.createElement("p");
             itemLista.setAttribute("class", "itemLista");
             const textNode = document.createTextNode(`${quantidade_produto} ${result_info[i].produto}`)
             itemLista.appendChild(textNode);
             carrinho.appendChild(itemLista);
-            console.log("SEGUNDO IF ATIVADO")
             break;
           }
         }
@@ -84,9 +82,27 @@ const atualizarCarrinho = async () => {
   console.log(result);
   removerProdutos();
   atualizarProdutos();
-  id_produto = '';
-  quantidade_produto = '';
+  document.getElementById('id_produto').value = '';
+  document.getElementById('quantidade_produto').value = '';
 };
+
+const efetuarCompra = async () => {
+  const login = document.getElementById("login_input").value;
+  const senha = document.getElementById("senha_input").value;
+  const itensComprados = [];
+  for(let j = 0; j < document.getElementsByClassName("itemLista").length; j++){
+    const itens = document.getElementsByClassName("itemLista").item(j);
+    const item = itens.innerText.split(" ")[1];
+    const quantidade = itens.innerText.split(" ")[0];
+    itensComprados.push({
+      quantidade: quantidade,
+      produto: item,
+      nome: login,
+      senha: senha
+    }) // mandar pro backend e conferir
+  }
+  console.log(itensComprados);
+}
 
 const conferirDivida = async () => {
   const response = await fetch("http:/localhost:3000/divida");

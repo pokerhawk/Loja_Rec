@@ -30,11 +30,18 @@
             <label for="">Quantidade:</label>
             <input type="text" id="quantidade_produto" placeholder="Quantidade">
             <br>
-            <button type="button" onclick="atualizarCarrinho()">Enviar</button>
+            <button type="button" onclick="atualizarCarrinho()">Adicionar ao Carrinho</button>
             <div id="carrinho">
             </div>
         </div>
-        <button type="button" onclick="">COMPRAR</button>
+        <div>
+            <label>Nome</label>
+            <input type="text" name="nome" id="login_input" placeholder="Nome">
+            <br>
+            <label>Senha</label>
+            <input type="password" name="senha" id="senha_input" placeholder="Senha">
+            <button type="button" onclick="efetuarCompra()">Efetuar Compra</button>
+        </div>
         <div id="formulario_divida">
             <form>
                 <h1>Quer conferir quanto deve?</h1>
