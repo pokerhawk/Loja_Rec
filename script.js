@@ -31,7 +31,7 @@ const removerCarrinho = () => {
   divCarrinho.removeChild(carrinho);
 };
 
-const atualizarCarrinho = async () => {
+const atualizarCarrinho = async () => { //remover DB thing
   let id_produto = document.getElementById("id_produto").value;
   let quantidade_produto = document.getElementById("quantidade_produto").value;
   const carrinho = document.querySelector("#carrinho");
@@ -89,23 +89,88 @@ const atualizarCarrinho = async () => {
 const efetuarCompra = async () => {
   const login = document.getElementById("login_input").value;
   const senha = document.getElementById("senha_input").value;
-  const itensComprados = [];
+  const response_info = await fetch("http:/localhost:3000/produtos");
+  const result_info = await response_info.json();
+  const codigo = [];
+  let divida = 0;
+  const data = `${new Date().getFullYear()}-${new Date().getMonth()+1}-${new Date().getDate()}`
   for(let j = 0; j < document.getElementsByClassName("itemLista").length; j++){
     const itens = document.getElementsByClassName("itemLista").item(j);
     const item = itens.innerText.split(" ")[1];
     const quantidade = itens.innerText.split(" ")[0];
-    itensComprados.push({
-      quantidade: quantidade,
-      produto: item,
-      nome: login,
-      senha: senha
-    }) // mandar pro backend e conferir
+    for(i in result_info){
+      if(item == result_info[i].produto){
+        codigo.push(result_info[i].ID)
+        codigo.push(Number(quantidade))
+      }
+    }
   }
-  console.log(itensComprados);
+  const login_response = await fetch("http:/localhost:3000/usuarios")
+  const login_result = await login_response.json();
+  for(i in login_result){
+    if (login == login_result[i].nome && senha == login_result[i].senha) {
+      const response = await fetch("http:/localhost:3000/pedido",{
+        method: "post",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          nome: login,
+          codigo: codigo.toString(),
+          data: data
+        })
+      })
+      const result = await response.json();
+      adicionarDivida(login);
+      console.log(result)
+      break;
+    }
+  }
+}
+
+const adicionarDivida = async (Usuario) => {
+  const responseUsuarios = await fetch("http:/localhost:3000/usuarios")
+  const listaUsuarios =  await responseUsuarios.json();
+  const responseProdutos = await fetch("http:/localhost:3000/produtos")
+  const listaProdutos =  await responseProdutos.json();
+  const responsePedidos = await fetch("http:/localhost:3000/pedidos")
+  const listaPedidos =  await responsePedidos.json();
+  const codigo = (listaPedidos[listaPedidos.length-1].codigo).split(',')
+  let sum = 0;
+  let cost = [];
+  for(i in codigo){
+    if(!i%2==0){
+      for(j in listaProdutos){
+        if(codigo[i-1] == listaProdutos[j].ID){
+          const preco = Number(listaProdutos[j].preco)
+          const quantidade = Number(codigo[i])
+          sum = preco*quantidade
+          cost.push(sum)
+          break;
+        }
+      }
+    }
+  }
+  cost.splice(cost.length-1, 1) //solve this problem
+  for(i in listaUsuarios){
+    if(listaUsuarios[i].nome == Usuario){
+      const divida = Number(listaUsuarios[i].divida)
+      cost.push(divida)
+    }
+  }
+  const finalCost = cost.reduce((partialSum, a) => partialSum + a, 0);
+  const response = await fetch("http:/localhost:3000/atualizaDivida", {
+    method: "put",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      cost: finalCost,
+      nome: Usuario
+    }),
+  });
+  const result = await response.json();
+  console.log(result)
 }
 
 const conferirDivida = async () => {
-  const response = await fetch("http:/localhost:3000/divida");
+  const response = await fetch("http:/localhost:3000/usuarios");
   const result = await response.json();
   const login = document.getElementById("login_input").value;
   const senha = document.getElementById("senha_input").value;
@@ -126,8 +191,7 @@ const cadastrar = async () => {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       nome: cadastro_nome,
-      senha: cadastro_senha,
-      divida: 0,
+      senha: cadastro_senha
     }),
   });
   const result = await response.json();

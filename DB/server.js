@@ -16,7 +16,7 @@ app.use(cors());
 app.use(express.json());
 ////////////////////////////////////// SERVER
 
-app.get("/divida", (req, res) => {
+app.get("/usuarios", (req, res) => {
   knex
     .select("*")
     .from("users")
@@ -40,6 +40,18 @@ app.get("/produtos", (req, res) => {
     });
 });
 
+app.get("/pedidos", (req, res) => {
+  knex
+    .select("*")
+    .from("pedidos")
+    .then((data) => {
+      res.json(data);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+});
+
 app.put("/carrinho", async (req, res) => {
   const { ID_prod, quantidade_prod } = req.body;
   knex("produtos")
@@ -52,6 +64,19 @@ app.put("/carrinho", async (req, res) => {
       res.json(`ERROR: ${err}`);
     });
 });
+
+app.put("/atualizaDivida", async (req, res)=>{
+  const {cost, nome} = req.body;
+  knex("users")
+  .where("nome", nome)
+  .update({
+    divida: cost
+  })
+  .then(res.json("Banco Atualizado"))
+  .catch((err) => {
+    res.json(`ERROR: ${err}`);
+  });
+})
 
 app.post("/cadastro", async (req, res) => {
   const { nome, senha } = req.body;
@@ -74,6 +99,27 @@ app.post("/cadastro", async (req, res) => {
     .catch((err) => {
       console.log(err);
     });
+});
+
+app.post("/pedido", async (req, res)=>{
+  const nome = req.body.nome;
+  const codigo = req.body.codigo;
+  const data = req.body.data;
+  if(!nome||!codigo||!data){
+    return res.status(400).json("Dados incorretos!");
+  }
+  knex.transaction((trx)=>{
+    trx.insert({
+      nome:nome,
+      codigo:codigo,
+      data:data
+    })
+    .into("pedidos")
+    .then(res.json("Pedido Efetuado"))
+    .then(trx.commit)
+    .catch(trx.rollback);
+  })
+  .catch((err)=>{console.log(err)});
 });
 
 // app.delete('/deletarUsuario', (req, res)=>{ // CHECK
