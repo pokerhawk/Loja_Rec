@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./style.css">
-    <title>Reconhecimento de compra</title>
+    <title>Loja de compra</title>
 </head>
 <body>
     <form action="" method="get">
@@ -24,8 +24,8 @@
         </div>
         <div>
             <h2>Carrinho</h2>
-            <label for="">ID do Produto:</label>
-            <input type="text" id="id_produto" placeholder="ID do Produto">
+            <label for="">Produto:</label>
+            <input type="text" id="id_produto" placeholder="Produto">
             <br>
             <label for="">Quantidade:</label>
             <input type="text" id="quantidade_produto" placeholder="Quantidade">
@@ -33,18 +33,21 @@
             <button type="button" onclick="atualizarCarrinho()">Adicionar ao Carrinho</button>
             <div id="carrinho">
             </div>
+            <button type="button" onclick="removerCarrinho()">Limpar Carrinho</button>
         </div>
-        <div>
-            <label>Nome</label>
+        <div id="divEfetuarCompra">
+            <h2>Compre</h2>
+            <label>Nome:</label>
             <input type="text" name="nome" id="login_input" placeholder="Nome">
             <br>
-            <label>Senha</label>
+            <label>Senha:</label>
             <input type="password" name="senha" id="senha_input" placeholder="Senha">
+            <br>
             <button type="button" onclick="efetuarCompra()">Efetuar Compra</button>
         </div>
         <div id="formulario_divida">
             <form>
-                <h1>Quer conferir quanto deve?</h1>
+                <h2>Quer conferir quanto deve?</h2>
                 <label>Nome</label>
                 <input type="text" name="nome" id="login_input" placeholder="Nome">
                 <br>

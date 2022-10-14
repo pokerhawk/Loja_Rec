@@ -10,7 +10,7 @@ const atualizarProdutos = async () => {
     const produtos = document.getElementById("produtos");
     const li = document.createElement("li");
     const text = document.createTextNode(
-      `${result[i].quantidade} ${result[i].produto} - ${result[i].preco}R$ | ID do Produto: ${result[i].ID}`
+      `${result[i].quantidade} ${result[i].produto} - ${result[i].preco}R$ | ID Produto: ${result[i].ID}`
     );
     li.appendChild(text);
     produtos.appendChild(li);
@@ -25,135 +25,158 @@ const removerProdutos = () => {
 };
 
 const removerCarrinho = () => {
-  // NOT BEING USED
-  const divCarrinho = document.getElementById("divCarrinho");
-  const carrinho = document.getElementById("carrinho");
-  divCarrinho.removeChild(carrinho);
+  document.getElementById('carrinho').innerHTML ='';
 };
 
-const atualizarCarrinho = async () => { //remover DB thing
+const atualizarCarrinho = async () => {
+  //remover DB thing
   let id_produto = document.getElementById("id_produto").value;
   let quantidade_produto = document.getElementById("quantidade_produto").value;
   const carrinho = document.querySelector("#carrinho");
-  const response_info = await fetch("http:/localhost:3000/produtos");
-  const result_info = await response_info.json();
+  const produtosDB = await fetch("http:/localhost:3000/produtos");
+  const produtosDB_result = await produtosDB.json();
   let dbContador = 0;
-  for (i in result_info) {
-    if (result_info[i].ID == Number(id_produto)) {
-      dbContador = Number(result_info[i].quantidade - quantidade_produto);
-      if (document.getElementsByClassName("itemLista").length == 0){
+  for (i in produtosDB_result) {
+    if (
+      produtosDB_result[i].ID == Number(id_produto) ||
+      produtosDB_result[i].produto == id_produto
+    ) {
+      dbContador = Number(produtosDB_result[i].quantidade - quantidade_produto);
+      if (document.getElementsByClassName("itemLista").length == 0) {
         const itemLista = document.createElement("p");
         itemLista.setAttribute("class", "itemLista");
-        const textNode = document.createTextNode(`${quantidade_produto} ${result_info[i].produto}`)
+        const textNode = document.createTextNode(
+          `${quantidade_produto} ${produtosDB_result[i].produto}`
+        );
         itemLista.appendChild(textNode);
         carrinho.appendChild(itemLista);
-      } else{
-        for(let j = 0; j < document.getElementsByClassName("itemLista").length; j++){
+      } else {
+        for (
+          let j = 0;
+          j < document.getElementsByClassName("itemLista").length;
+          j++
+        ) {
           const itens = document.getElementsByClassName("itemLista").item(j);
-          const oldProduto = itens.innerText.split(" ")[1]
+          const oldProduto = itens.innerText.split(" ")[1];
           let verificaNumero = Number(itens.innerText.split(" ")[0]);
           let adicionaValor = verificaNumero + Number(quantidade_produto);
-          if(oldProduto == result_info[i].produto){
-            itens.innerText = `${adicionaValor} ${result_info[i].produto}`;
+          if (oldProduto == produtosDB_result[i].produto) {
+            itens.innerText = `${adicionaValor} ${produtosDB_result[i].produto}`;
             break;
-          } 
-          if (j == document.getElementsByClassName("itemLista").length-1) {
+          }
+          if (j == document.getElementsByClassName("itemLista").length - 1) {
             const itemLista = document.createElement("p");
             itemLista.setAttribute("class", "itemLista");
-            const textNode = document.createTextNode(`${quantidade_produto} ${result_info[i].produto}`)
+            const textNode = document.createTextNode(
+              `${quantidade_produto} ${produtosDB_result[i].produto}`
+            );
             itemLista.appendChild(textNode);
             carrinho.appendChild(itemLista);
             break;
           }
         }
-
       }
     }
   }
-  const response = await fetch("http:/localhost:3000/carrinho", {
-    method: "put",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      ID_prod: id_produto,
-      quantidade_prod: dbContador,
-    }),
-  });
-  const result = await response.json();
-  console.log(result);
   removerProdutos();
   atualizarProdutos();
-  document.getElementById('id_produto').value = '';
-  document.getElementById('quantidade_produto').value = '';
+  document.getElementById("id_produto").value = "";
+  document.getElementById("quantidade_produto").value = "";
 };
 
 const efetuarCompra = async () => {
   const login = document.getElementById("login_input").value;
   const senha = document.getElementById("senha_input").value;
-  const response_info = await fetch("http:/localhost:3000/produtos");
-  const result_info = await response_info.json();
+  const produtosDB = await fetch("http:/localhost:3000/produtos");
+  const produtosDB_result = await produtosDB.json();
   const codigo = [];
   let divida = 0;
-  const data = `${new Date().getFullYear()}-${new Date().getMonth()+1}-${new Date().getDate()}`
-  for(let j = 0; j < document.getElementsByClassName("itemLista").length; j++){
+  const data = `${new Date().getFullYear()}-${
+    new Date().getMonth() + 1
+  }-${new Date().getDate()}`;
+  for (
+    let j = 0;
+    j < document.getElementsByClassName("itemLista").length;
+    j++
+  ) {
     const itens = document.getElementsByClassName("itemLista").item(j);
     const item = itens.innerText.split(" ")[1];
     const quantidade = itens.innerText.split(" ")[0];
-    for(i in result_info){
-      if(item == result_info[i].produto){
-        codigo.push(result_info[i].ID)
-        codigo.push(Number(quantidade))
+    for (i in produtosDB_result) {
+      if (item == produtosDB_result[i].produto) {
+        codigo.push(produtosDB_result[i].ID);
+        codigo.push(Number(quantidade));
       }
     }
   }
-  const login_response = await fetch("http:/localhost:3000/usuarios")
+  const login_response = await fetch("http:/localhost:3000/usuarios");
   const login_result = await login_response.json();
-  for(i in login_result){
+  for (i in login_result) {
     if (login == login_result[i].nome && senha == login_result[i].senha) {
-      const response = await fetch("http:/localhost:3000/pedido",{
+      const response = await fetch("http:/localhost:3000/pedido", {
         method: "post",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           nome: login,
           codigo: codigo.toString(),
-          data: data
-        })
-      })
+          data: data,
+        }),
+      });
       const result = await response.json();
       adicionarDivida(login);
-      console.log(result)
+      for(let j = 0; j < document.getElementsByClassName("itemLista").length; j++){ //
+        const itens = document.getElementsByClassName("itemLista").item(j); //
+        const item = itens.innerText.split(" ")[1];//
+        const quantidade = itens.innerText.split(" ")[0];//
+        const COUNTER = 0; // XXXXXXXXXXXXXXXXXXXXXXXX
+        const attDividaDB = await fetch("http:/localhost:3000/carrinho", {//
+          method: "put",//
+          headers: { "Content-Type": "application/json" },//
+          body: JSON.stringify({//
+            ID_prod: item,//
+            quantidade_prod: quantidade,//
+          }),//
+        });//
+        const attDividaDB_result = await attDividaDB.json();//
+        console.log(attDividaDB_result)//
+      }
+      console.log(result);
+      alert(result);
       break;
     }
   }
-}
+  document.getElementById("login_input").value = "";
+  document.getElementById("senha_input").value = "";
+};
 
 const adicionarDivida = async (Usuario) => {
-  const responseUsuarios = await fetch("http:/localhost:3000/usuarios")
-  const listaUsuarios =  await responseUsuarios.json();
-  const responseProdutos = await fetch("http:/localhost:3000/produtos")
-  const listaProdutos =  await responseProdutos.json();
-  const responsePedidos = await fetch("http:/localhost:3000/pedidos")
-  const listaPedidos =  await responsePedidos.json();
-  const codigo = (listaPedidos[listaPedidos.length-1].codigo).split(',')
+  const responseUsuarios = await fetch("http:/localhost:3000/usuarios");
+  const listaUsuarios = await responseUsuarios.json();
+  const responseProdutos = await fetch("http:/localhost:3000/produtos");
+  const listaProdutos = await responseProdutos.json();
+  const responsePedidos = await fetch("http:/localhost:3000/pedidos");
+  const listaPedidos = await responsePedidos.json();
+  const codigo = listaPedidos[listaPedidos.length - 1].codigo.split(",");
   let sum = 0;
   let cost = [];
-  for(i in codigo){
-    if(!i%2==0){
-      for(j in listaProdutos){
-        if(codigo[i-1] == listaProdutos[j].ID){
-          const preco = Number(listaProdutos[j].preco)
-          const quantidade = Number(codigo[i])
-          sum = preco*quantidade
-          cost.push(sum)
+  for (i in codigo) {
+    if (!i % 2 == 0) {
+      for (j in listaProdutos) {
+        if (codigo[i - 1] == listaProdutos[j].ID) {
+          const preco = Number(listaProdutos[j].preco);
+          const quantidade = Number(codigo[i]);
+          sum = preco * quantidade;
+          cost.push(sum);
           break;
         }
       }
     }
   }
-  cost.splice(cost.length-1, 1) //solve this problem
-  for(i in listaUsuarios){
-    if(listaUsuarios[i].nome == Usuario){
-      const divida = Number(listaUsuarios[i].divida)
-      cost.push(divida)
+  cost.splice(cost.length - 1, 1); //solve this problem
+  for (i in listaUsuarios) {
+    if (listaUsuarios[i].nome == Usuario) {
+      const divida = Number(listaUsuarios[i].divida);
+      cost.push(divida);
     }
   }
   const finalCost = cost.reduce((partialSum, a) => partialSum + a, 0);
@@ -162,12 +185,12 @@ const adicionarDivida = async (Usuario) => {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       cost: finalCost,
-      nome: Usuario
+      nome: Usuario,
     }),
   });
   const result = await response.json();
-  console.log(result)
-}
+  console.log(result);
+};
 
 const conferirDivida = async () => {
   const response = await fetch("http:/localhost:3000/usuarios");
@@ -191,11 +214,13 @@ const cadastrar = async () => {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       nome: cadastro_nome,
-      senha: cadastro_senha
+      senha: cadastro_senha,
     }),
   });
   const result = await response.json();
-  console.log(result);
+  document.getElementById("cadastro_nome").value = "";
+  document.getElementById("cadastro_senha").value = "";
+  alert(result);
 };
 
 document
@@ -205,3 +230,4 @@ document
       conferirDivida();
     }
   });
+
