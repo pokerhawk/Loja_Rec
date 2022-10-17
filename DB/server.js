@@ -53,13 +53,13 @@ app.get("/pedidos", (req, res) => {
 });
 
 app.put("/carrinho", async (req, res) => {
-  const { ID_prod, quantidade_prod } = req.body;
+  const { produto, quantidade_prod } = req.body;
   knex("produtos")
-    .where("ID", ID_prod)
+    .where("produto", produto)
     .update({
       quantidade: quantidade_prod,
     })
-    .then(res.json("Banco Atualizado"))
+    .then(res.json("Quantidade Atualizada"))
     .catch((err) => {
       res.json(`ERROR: ${err}`);
     });
@@ -72,7 +72,7 @@ app.put("/atualizaDivida", async (req, res)=>{
   .update({
     divida: cost
   })
-  .then(res.json("Banco Atualizado"))
+  .then(res.json("Divida Atualizado"))
   .catch((err) => {
     res.json(`ERROR: ${err}`);
   });
@@ -149,6 +149,7 @@ knex
   .then((data) => {
     console.log(data);
   });
+///////////////////////////////////////
 
 app.listen(port, () => {
   console.log(`Server running at https:localhost:${port}`);

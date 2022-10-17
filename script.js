@@ -1,5 +1,4 @@
 const atualizarProdutos = async () => {
-  //MAYBE CHANGE THIS??? (IT IS WORKING KO)
   const divProdutos = document.getElementById("divProdutos");
   const ul = document.createElement("ul");
   ul.setAttribute("id", "produtos");
@@ -29,52 +28,56 @@ const removerCarrinho = () => {
 };
 
 const atualizarCarrinho = async () => {
-  //remover DB thing
   let id_produto = document.getElementById("id_produto").value;
   let quantidade_produto = document.getElementById("quantidade_produto").value;
   const carrinho = document.querySelector("#carrinho");
   const produtosDB = await fetch("http:/localhost:3000/produtos");
   const produtosDB_result = await produtosDB.json();
-  let dbContador = 0;
   for (i in produtosDB_result) {
     if (
       produtosDB_result[i].ID == Number(id_produto) ||
       produtosDB_result[i].produto == id_produto
     ) {
-      dbContador = Number(produtosDB_result[i].quantidade - quantidade_produto);
-      if (document.getElementsByClassName("itemLista").length == 0) {
-        const itemLista = document.createElement("p");
-        itemLista.setAttribute("class", "itemLista");
-        const textNode = document.createTextNode(
-          `${quantidade_produto} ${produtosDB_result[i].produto}`
-        );
-        itemLista.appendChild(textNode);
-        carrinho.appendChild(itemLista);
-      } else {
-        for (
-          let j = 0;
-          j < document.getElementsByClassName("itemLista").length;
-          j++
-        ) {
-          const itens = document.getElementsByClassName("itemLista").item(j);
-          const oldProduto = itens.innerText.split(" ")[1];
-          let verificaNumero = Number(itens.innerText.split(" ")[0]);
-          let adicionaValor = verificaNumero + Number(quantidade_produto);
-          if (oldProduto == produtosDB_result[i].produto) {
-            itens.innerText = `${adicionaValor} ${produtosDB_result[i].produto}`;
-            break;
-          }
-          if (j == document.getElementsByClassName("itemLista").length - 1) {
-            const itemLista = document.createElement("p");
-            itemLista.setAttribute("class", "itemLista");
-            const textNode = document.createTextNode(
-              `${quantidade_produto} ${produtosDB_result[i].produto}`
-            );
-            itemLista.appendChild(textNode);
-            carrinho.appendChild(itemLista);
-            break;
+      if(quantidade_produto <= produtosDB_result[i].quantidade){
+        if (document.getElementsByClassName("itemLista").length == 0) {
+          const itemLista = document.createElement("p");
+          itemLista.setAttribute("class", "itemLista");
+          const textNode = document.createTextNode(
+            `${quantidade_produto} ${produtosDB_result[i].produto}`
+          );
+          itemLista.appendChild(textNode);
+          carrinho.appendChild(itemLista);
+        } else {
+          for (
+            let j = 0;
+            j < document.getElementsByClassName("itemLista").length;
+            j++
+          ) {
+            const itens = document.getElementsByClassName("itemLista").item(j);
+            const oldProduto = itens.innerText.split(" ")[1];
+            let verificaNumero = Number(itens.innerText.split(" ")[0]);
+            let adicionaValor = verificaNumero + Number(quantidade_produto);
+            if (oldProduto == produtosDB_result[i].produto && adicionaValor<= produtosDB_result[i].quantidade) {
+              itens.innerText = `${adicionaValor} ${produtosDB_result[i].produto}`;
+              break;
+            }
+            if(!adicionaValor<= produtosDB_result[i].quantidade){
+              alert("Quantia insuficiente")
+            }
+            if (j == document.getElementsByClassName("itemLista").length - 1 && !produtosDB_result[i].produto == itens) {
+              const itemLista = document.createElement("p");
+              itemLista.setAttribute("class", "itemLista");
+              const textNode = document.createTextNode(
+                `${quantidade_produto} ${produtosDB_result[i].produto}`
+              );
+              itemLista.appendChild(textNode);
+              carrinho.appendChild(itemLista);
+              break;
+            }
           }
         }
+      } else {
+        alert("Quantia insuficiente")
       }
     }
   }
@@ -90,7 +93,6 @@ const efetuarCompra = async () => {
   const produtosDB = await fetch("http:/localhost:3000/produtos");
   const produtosDB_result = await produtosDB.json();
   const codigo = [];
-  let divida = 0;
   const data = `${new Date().getFullYear()}-${
     new Date().getMonth() + 1
   }-${new Date().getDate()}`;
@@ -124,29 +126,35 @@ const efetuarCompra = async () => {
       });
       const result = await response.json();
       adicionarDivida(login);
-      for(let j = 0; j < document.getElementsByClassName("itemLista").length; j++){ //
-        const itens = document.getElementsByClassName("itemLista").item(j); //
-        const item = itens.innerText.split(" ")[1];//
-        const quantidade = itens.innerText.split(" ")[0];//
-        const COUNTER = 0; // XXXXXXXXXXXXXXXXXXXXXXXX
-        const attDividaDB = await fetch("http:/localhost:3000/carrinho", {//
-          method: "put",//
-          headers: { "Content-Type": "application/json" },//
-          body: JSON.stringify({//
-            ID_prod: item,//
-            quantidade_prod: quantidade,//
-          }),//
-        });//
-        const attDividaDB_result = await attDividaDB.json();//
-        console.log(attDividaDB_result)//
+      for(let j = 0; j < document.getElementsByClassName("itemLista").length; j++){
+        const itens = document.getElementsByClassName("itemLista").item(j);
+        const item = itens.innerText.split(" ")[1];
+        const quantidade = Number(itens.innerText.split(" ")[0]);
+        let dbContador = 0;
+        for(k in produtosDB_result){
+          if(produtosDB_result[k].produto == item){
+            dbContador = produtosDB_result[k].quantidade - quantidade
+          }
+        }
+        const attDividaDB = await fetch("http:/localhost:3000/carrinho", {
+          method: "put",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            produto: item,
+            quantidade_prod: dbContador,
+          }),
+        });
+        const attDividaDB_result = await attDividaDB.json();//NOT USED
       }
-      console.log(result);
       alert(result);
       break;
     }
   }
   document.getElementById("login_input").value = "";
   document.getElementById("senha_input").value = "";
+  removerProdutos();
+  atualizarProdutos();
+  removerCarrinho();
 };
 
 const adicionarDivida = async (Usuario) => {
@@ -195,8 +203,8 @@ const adicionarDivida = async (Usuario) => {
 const conferirDivida = async () => {
   const response = await fetch("http:/localhost:3000/usuarios");
   const result = await response.json();
-  const login = document.getElementById("login_input").value;
-  const senha = document.getElementById("senha_input").value;
+  const login = document.getElementById("login_divida").value;
+  const senha = document.getElementById("senha_divida").value;
   let divida = document.getElementById("resposta_dividendo");
   for (i in result) {
     if (login == result[i].nome && senha == result[i].senha) {
@@ -223,11 +231,27 @@ const cadastrar = async () => {
   alert(result);
 };
 
-document
-  .getElementById("senha_input")
-  .addEventListener("keydown", function (event) {
-    if (event.key == "Enter") {
-      conferirDivida();
-    }
-  });
+document.getElementById("cadastro_senha").addEventListener("keydown",(event)=>{
+  if(event.key=="Enter"){
+    cadastrar();
+  }
+})
 
+document.getElementById("senha_input").addEventListener("keydown",function(event){
+  if (event.key == "Enter") {
+    efetuarCompra();
+  }
+})
+
+document.getElementById("senha_divida").addEventListener("keydown", (event)=>{
+  if(event.key == "Enter"){
+    conferirDivida();
+  }
+})
+
+document.getElementById("quantidade_produto").addEventListener("keydown",(event)=>{
+  if(event.key == "Enter"){
+    atualizarCarrinho();
+    document.getElementById("id_produto").focus();
+  }
+})
