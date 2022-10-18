@@ -20,3 +20,9 @@ main{
 #divEfetuarCompra{
     padding-top:50px
 }
+
+aside{ 
+    height: 200px; /* altura */
+    width: 30%; /* largura */
+    float:right; /* alinhar à direita */
+}

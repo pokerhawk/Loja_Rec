@@ -8,57 +8,45 @@
     <title>Loja de compra</title>
 </head>
 <body>
-    <form action="" method="get">
-        <h1>Cadastre-se</h1>
-        <input type="text" placeholder="Nome" id="cadastro_nome">
-        <input type="password" placeholder="Senha" id="cadastro_senha">
-        <button type="button" onclick="cadastrar()">Enviar</button>
-    </form>
-    <!-- <div>
-        <canvas id="canvas" width="800" height="800"></canvas>
-        <p id="pessoa_reconhecida">asd</p>
-    </div> -->
+    <header>
+        <div>
+            <big>
+                <a href="./Components/Cadastro/index.html">Cadastre-se aqui!</a>
+            </big>
+            <big>
+                <a href="./Components/Divida/index.html">Confira sua divida aqui!</a>
+            </big>
+        </div>
+    </header>
     <main>
         <div id="divProdutos">
             <h2>Produtos</h2>
         </div>
-        <div>
-            <h2>Carrinho</h2>
-            <label for="">Produto:</label>
-            <input type="text" id="id_produto" placeholder="Produto">
-            <br>
-            <label for="">Quantidade:</label>
-            <input type="text" id="quantidade_produto" placeholder="Quantidade">
-            <br>
-            <button type="button" onclick="atualizarCarrinho()">Adicionar ao Carrinho</button>
-            <div id="carrinho">
+        <aside>
+            <div>
+                <h2>Carrinho</h2>
+                <label for="">Produto:</label>
+                <input type="text" id="id_produto" placeholder="Produto">
+                <br>
+                <label for="">Quantidade:</label>
+                <input type="text" id="quantidade_produto" placeholder="Quantidade">
+                <br>
+                <button type="button" onclick="atualizarCarrinho()">Adicionar ao Carrinho</button>
+                <div id="carrinho">
+                </div>
+                <button type="button" onclick="removerCarrinho()">Limpar Carrinho</button>
             </div>
-            <button type="button" onclick="removerCarrinho()">Limpar Carrinho</button>
-        </div>
-        <div id="divEfetuarCompra">
-            <h2>Compre</h2>
-            <label>Nome:</label>
-            <input type="text" name="nome" id="login_input" placeholder="Nome">
-            <br>
-            <label>Senha:</label>
-            <input type="password" name="senha" id="senha_input" placeholder="Senha">
-            <br>
-            <button type="button" onclick="efetuarCompra()">Efetuar Compra</button>
-        </div>
-        <div id="formulario_divida">
-            <form>
-                <h2>Quer conferir quanto deve?</h2>
-                <label>Nome</label>
-                <input type="text" name="nome" id="login_divida" placeholder="Nome">
+            <div id="divEfetuarCompra">
+                <h2>Compre</h2>
+                <label>Nome:</label>
+                <input type="text" name="nome" id="login_input" placeholder="Nome">
                 <br>
-                <label>Senha</label>
-                <input type="password" name="senha" id="senha_divida" placeholder="Senha">
+                <label>Senha:</label>
+                <input type="password" name="senha" id="senha_input" placeholder="Senha">
                 <br>
-                <!-- <input type="submit" value="Enviar" onclick="conferir()"> -->
-                <button type="button" onclick="conferirDivida()">Enviar</button>
-                <p id="resposta_dividendo">Dívida</p>
-            </form>
-        </div>
+                <button type="button" onclick="efetuarCompra()">Efetuar Compra</button>
+            </div>
+        </aside>
     </main>
     <script src="./script.js"></script>
 </body>

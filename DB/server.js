@@ -9,7 +9,7 @@ const knex = require("knex")({
     port: 3306,
     user: "root",
     password: "hubs",
-    database: "loja",
+    database: "lojaDB",
   },
 });
 app.use(cors());
@@ -19,7 +19,7 @@ app.use(express.json());
 app.get("/usuarios", (req, res) => {
   knex
     .select("*")
-    .from("users")
+    .from("usuarios")
     .then((data) => {
       res.json(data);
     })
@@ -67,8 +67,8 @@ app.put("/carrinho", async (req, res) => {
 
 app.put("/atualizaDivida", async (req, res)=>{
   const {cost, nome} = req.body;
-  knex("users")
-  .where("nome", nome)
+  knex("usuarios")
+  .where("login", nome)
   .update({
     divida: cost
   })
@@ -87,17 +87,18 @@ app.post("/cadastro", async (req, res) => {
     .transaction((trx) => {
       trx
         .insert({
-          nome: nome,
+          login: nome,
           senha: senha,
           divida: 0,
         })
-        .into("users")
-        .then(res.json("Cadastrado com sucesso!"))
+        .into("usuarios")
         .then(trx.commit)
-        .catch(trx.rollback);
+        .catch(trx.rollback)
+        .then(res.json("Cadastrado com sucesso!"));
     })
     .catch((err) => {
       console.log(err);
+      return res.json("Login existente, tente novamente!")
     });
 });
 
@@ -110,21 +111,24 @@ app.post("/pedido", async (req, res)=>{
   }
   knex.transaction((trx)=>{
     trx.insert({
-      nome:nome,
+      usuario:nome,
       codigo:codigo,
       data:data
     })
     .into("pedidos")
-    .then(res.json("Pedido Efetuado"))
     .then(trx.commit)
-    .catch(trx.rollback);
+    .catch(trx.rollback)
+    .then(res.json("Pedido Efetuado"));
   })
-  .catch((err)=>{console.log(err)});
+  .catch((err)=>{
+    console.log(err)
+    res.json("Algo deu errado!")
+  });
 });
 
 // app.delete('/deletarUsuario', (req, res)=>{ // CHECK
-//   knex('users').dropColumn().where('nome', 'joao');
-//   knex('users').where('nome', 'joao').del()
+//   knex('usuarios').dropColumn().where('nome', 'joao');
+//   knex('usuarios').where('nome', 'joao').del()
 //   .then(res=>{console.log(res)})
 //   .catch(err=>{console.log(err)})
 // })
@@ -132,7 +136,7 @@ app.post("/pedido", async (req, res)=>{
 ////////////////////////////////////// CONSOLE LOG DISPLAYS
 knex
   .select("*")
-  .from("users")
+  .from("usuarios")
   .then((data) => {
     console.log(data);
   })
@@ -142,9 +146,9 @@ knex
 
 knex
   .select("*")
-  .from("users")
+  .from("usuarios")
   .where({
-    nome: "eliabe",
+    login: "eliabe",
   })
   .then((data) => {
     console.log(data);

@@ -114,7 +114,7 @@ const efetuarCompra = async () => {
   const login_response = await fetch("http:/localhost:3000/usuarios");
   const login_result = await login_response.json();
   for (i in login_result) {
-    if (login == login_result[i].nome && senha == login_result[i].senha) {
+    if (login == login_result[i].login && senha == login_result[i].senha) {
       const response = await fetch("http:/localhost:3000/pedido", {
         method: "post",
         headers: { "Content-Type": "application/json" },
@@ -148,6 +148,8 @@ const efetuarCompra = async () => {
       }
       alert(result);
       break;
+    } else {
+      alert("Usuário ou senha incorretos!")
     }
   }
   document.getElementById("login_input").value = "";
@@ -182,7 +184,7 @@ const adicionarDivida = async (Usuario) => {
   }
   cost.splice(cost.length - 1, 1); //solve this problem
   for (i in listaUsuarios) {
-    if (listaUsuarios[i].nome == Usuario) {
+    if (listaUsuarios[i].login == Usuario) {
       const divida = Number(listaUsuarios[i].divida);
       cost.push(divida);
     }
@@ -200,52 +202,9 @@ const adicionarDivida = async (Usuario) => {
   console.log(result);
 };
 
-const conferirDivida = async () => {
-  const response = await fetch("http:/localhost:3000/usuarios");
-  const result = await response.json();
-  const login = document.getElementById("login_divida").value;
-  const senha = document.getElementById("senha_divida").value;
-  let divida = document.getElementById("resposta_dividendo");
-  for (i in result) {
-    if (login == result[i].nome && senha == result[i].senha) {
-      divida.innerText = `${result[i].nome} você está devendo R$${result[i].divida}`;
-      break;
-    }
-  }
-};
-
-const cadastrar = async () => {
-  const cadastro_nome = document.getElementById("cadastro_nome").value;
-  const cadastro_senha = document.getElementById("cadastro_senha").value;
-  const response = await fetch("http:/localhost:3000/cadastro", {
-    method: "post",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      nome: cadastro_nome,
-      senha: cadastro_senha,
-    }),
-  });
-  const result = await response.json();
-  document.getElementById("cadastro_nome").value = "";
-  document.getElementById("cadastro_senha").value = "";
-  alert(result);
-};
-
-document.getElementById("cadastro_senha").addEventListener("keydown",(event)=>{
-  if(event.key=="Enter"){
-    cadastrar();
-  }
-})
-
 document.getElementById("senha_input").addEventListener("keydown",function(event){
   if (event.key == "Enter") {
     efetuarCompra();
-  }
-})
-
-document.getElementById("senha_divida").addEventListener("keydown", (event)=>{
-  if(event.key == "Enter"){
-    conferirDivida();
   }
 })
 
