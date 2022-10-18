@@ -25,5 +25,11 @@ CREATE TABLE pedidos (
 
 INSERT INTO produtos (produto, quantidade, preco) VALUES ('novo_produto', 10, 10);
 
+sudo pacman -S python-pip
+
+sudo pacman -S cmake
+
 pip install opencv-python
+
 pip install face_recognition
+
