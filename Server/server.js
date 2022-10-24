@@ -1,3 +1,4 @@
+const fs = require("fs");
 const express = require("express"); // remove cors and pg-promise
 var cors = require("cors");
 const app = express();
@@ -134,27 +135,52 @@ app.post("/pedido", async (req, res)=>{
 // })
 
 ////////////////////////////////////// CONSOLE LOG DISPLAYS
-knex
-  .select("*")
-  .from("usuarios")
-  .then((data) => {
-    console.log(data);
-  })
-  .catch((error) => {
-    console.log(error);
-  });
 
-knex
-  .select("*")
-  .from("usuarios")
-  .where({
-    login: "eliabe",
-  })
-  .then((data) => {
-    console.log(data);
-  });
+// knex
+// .select("*")
+// .from("usuarios")
+// .then((data) => {
+//   console.log(data);
+// })
+// .catch((error) => {
+//   console.log(error);
+// });
+
+// knex
+// .select("*")
+// .from("usuarios")
+// .where({
+//   login: "eliabe",
+// })
+// .then((data) => {
+//   console.log(data);
+// });
+
+// knex.select("*").from("produtos")
+// .then((data)=>{
+//   console.log(data)
+// })
+
+// knex.select("*").from("pedidos")
+// .then((data)=>{
+//   console.log(data)
+// })
+
 ///////////////////////////////////////
 
+//READING FILE//
+app.get("/pessoaReconhecida", async(req, res)=>{
+  fs.readFile('../face-rec/pessoa.txt', (err, data)=>{
+    if(err){
+      console.log(err)
+    }
+    const textfile = data.toString().split('-');
+    const pessoaReconhecida = textfile[textfile.length-1];
+    res.json(pessoaReconhecida)
+  })
+});
+
+///////////////////////////////////////
 app.listen(port, () => {
   console.log(`Server running at https:localhost:${port}`);
 });

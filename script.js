@@ -35,7 +35,7 @@ const atualizarCarrinho = async () => {
   const produtosDB_result = await produtosDB.json();
   for (i in produtosDB_result) {
     if (
-      produtosDB_result[i].ID == Number(id_produto) ||
+      produtosDB_result[i].ID == id_produto ||
       produtosDB_result[i].produto == id_produto
     ) {
       if(quantidade_produto <= produtosDB_result[i].quantidade){
@@ -61,10 +61,11 @@ const atualizarCarrinho = async () => {
               itens.innerText = `${adicionaValor} ${produtosDB_result[i].produto}`;
               break;
             }
-            if(!adicionaValor<= produtosDB_result[i].quantidade){
-              alert("Quantia insuficiente")
+            if(oldProduto == produtosDB_result[i].produto && !adicionaValor <= produtosDB_result[i].quantidade){
+              alert("Quantia insuficiente");
+              break;
             }
-            if (j == document.getElementsByClassName("itemLista").length - 1 && !produtosDB_result[i].produto == itens) {
+            if (j == document.getElementsByClassName("itemLista").length-1 && produtosDB_result[i].produto != oldProduto) {
               const itemLista = document.createElement("p");
               itemLista.setAttribute("class", "itemLista");
               const textNode = document.createTextNode(
@@ -148,7 +149,8 @@ const efetuarCompra = async () => {
       }
       alert(result);
       break;
-    } else {
+    }
+    if(i == login_result.length-1){
       alert("Usuário ou senha incorretos!")
     }
   }
@@ -182,7 +184,7 @@ const adicionarDivida = async (Usuario) => {
       }
     }
   }
-  cost.splice(cost.length - 1, 1); //solve this problem
+  // cost.splice(cost.length - 1, 1); //solve this problem
   for (i in listaUsuarios) {
     if (listaUsuarios[i].login == Usuario) {
       const divida = Number(listaUsuarios[i].divida);
@@ -202,6 +204,12 @@ const adicionarDivida = async (Usuario) => {
   console.log(result);
 };
 
+document.getElementById("pedidosLista").addEventListener("click", async(event)=>{
+  const response = await fetch("http:/localhost:3000/pedidos");
+  const result = await response.json();
+  console.log(result)
+})
+
 document.getElementById("senha_input").addEventListener("keydown",function(event){
   if (event.key == "Enter") {
     efetuarCompra();
@@ -214,3 +222,10 @@ document.getElementById("quantidade_produto").addEventListener("keydown",(event)
     document.getElementById("id_produto").focus();
   }
 })
+
+const pessoaReconhecida = window.setInterval(async function(){
+  const response = await fetch("http:/localhost:3000/pessoaReconhecida");
+  const result = await response.json();
+  console.log(result)
+}, 2000); //2 segundos
+// clearInterval(pessoaReconhecida) 

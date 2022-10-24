@@ -26,3 +26,8 @@ aside{
     width: 30%; /* largura */
     float:right; /* alinhar à direita */
 }
+
+footer{
+    position: fixed;
+    bottom: 0;
+}
