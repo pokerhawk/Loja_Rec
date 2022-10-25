@@ -11,10 +11,21 @@
     <form action="" method="get">
         <h1>Cadastre-se</h1>
         <input type="text" placeholder="Login" id="cadastro_nome">
+        <br>
         <input type="password" placeholder="Senha" id="cadastro_senha">
+        <br>
+        <h2>Escolha uma foto:</h2>
+        <label for="imageFile">Precisamos de uma foto frontal para o reconhecimento facial:</label>
+        <br>
+        <input type="file" id="imageFile" accept=".jpg, .jpeg, .png" />
+        <br>
         <button type="button" onclick="cadastrar()">Enviar</button>
     </form>
-    <a href="../../index.html">Voltar</a>
+    <footer>
+        <h1>
+            <a href="../../index.html">Voltar para a loja</a>
+        </h1>
+    </footer>
     <script src="./script.js"></script>
 </body>
 </html>
