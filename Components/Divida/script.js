@@ -1,3 +1,30 @@
+let conferePessoa = 'Unknown';
+
+window.setInterval(async function(){
+    const response = await fetch("http:/localhost:3000/pessoaReconhecida");
+    const result = await response.json();
+    if(conferePessoa != result){
+        console.log(result)
+        conferePessoa = result;
+        novoRosto(result);
+    }
+}, 1000);
+
+const novoRosto = async (pessoa) => {
+    const response = await fetch("http:/localhost:3000/usuarios");
+    const result = await response.json();
+    let divida = document.getElementById("resposta_dividendo");
+    for (i in result) {
+        if(pessoa == "Unknown"){
+            divida.innerText = 'Dívida'
+        }
+        if (pessoa == result[i].login) {
+            divida.innerText = `${result[i].login} você está devendo R$${result[i].divida}`;
+            break;
+        }
+    }
+}
+
 const conferirDivida = async () => {
     const response = await fetch("http:/localhost:3000/usuarios");
     const result = await response.json();

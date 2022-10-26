@@ -32,10 +32,10 @@
                 <label for="">Quantidade:</label>
                 <input type="text" id="quantidade_produto" placeholder="Quantidade">
                 <br>
-                <button type="button" onclick="atualizarCarrinho()">Adicionar ao Carrinho</button>
+                <button type="button" onclick="atualizarCarrinhoBtn()">Adicionar ao Carrinho</button>
                 <div id="carrinho">
                 </div>
-                <button type="button" onclick="removerCarrinho()">Limpar Carrinho</button>
+                <button type="button" onclick="removerCarrinhoBtn()">Limpar Carrinho</button>
             </div>
             <div id="divEfetuarCompra">
                 <h2>Compre</h2>
@@ -45,7 +45,10 @@
                 <label>Senha:</label>
                 <input type="password" name="senha" id="senha_input" placeholder="Senha">
                 <br>
-                <button type="button" onclick="efetuarCompra()">Efetuar Compra</button>
+                <button type="button" onclick="efetuarCompraBtn()">Efetuar Compra</button>
+                <br>
+                <button type="button" onclick="reconhecimentoFacialBtn()">Comprar com reconhecimento facial</button>
+                <p>pessoa reconhecida no momento: <p id="pessoaReconhecida"></p></p>
             </div>
         </aside>
     </main>

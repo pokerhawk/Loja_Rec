@@ -45,8 +45,8 @@ while True:
         name_output = name
         if name_output != eval_name_output:
             print(name_output)
-            f = open("pessoa.txt", "a")
-            f.write('-'+name_output)
+            f = open("pessoa.txt", "w") # modes : a, r, w, +
+            f.write(name_output)
             f.close()
             eval_name_output = name
         

@@ -1,3 +1,5 @@
+let conferePessoa = '';
+
 const atualizarProdutos = async () => {
   const divProdutos = document.getElementById("divProdutos");
   const ul = document.createElement("ul");
@@ -23,11 +25,11 @@ const removerProdutos = () => {
   divProdutos.removeChild(produtos);
 };
 
-const removerCarrinho = () => {
+const removerCarrinhoBtn = () => {
   document.getElementById('carrinho').innerHTML ='';
 };
 
-const atualizarCarrinho = async () => {
+const atualizarCarrinhoBtn = async () => {
   let id_produto = document.getElementById("id_produto").value;
   let quantidade_produto = document.getElementById("quantidade_produto").value;
   const carrinho = document.querySelector("#carrinho");
@@ -88,7 +90,7 @@ const atualizarCarrinho = async () => {
   document.getElementById("quantidade_produto").value = "";
 };
 
-const efetuarCompra = async () => {
+const efetuarCompraBtn = async () => {
   const login = document.getElementById("login_input").value;
   const senha = document.getElementById("senha_input").value;
   const produtosDB = await fetch("http:/localhost:3000/produtos");
@@ -204,6 +206,76 @@ const adicionarDivida = async (Usuario) => {
   console.log(result);
 };
 
+const reconhecimentoFacialBtn = async () => {
+  const pessoaReconhecida = conferePessoa;
+  const produtosDB = await fetch("http:/localhost:3000/produtos");
+  const produtosDB_result = await produtosDB.json();
+  const codigo = [];
+  const data = `${new Date().getFullYear()}-${
+    new Date().getMonth() + 1
+  }-${new Date().getDate()}`;
+  for (
+    let j = 0;
+    j < document.getElementsByClassName("itemLista").length;
+    j++
+  ) {
+    const itens = document.getElementsByClassName("itemLista").item(j);
+    const item = itens.innerText.split(" ")[1];
+    const quantidade = itens.innerText.split(" ")[0];
+    for (i in produtosDB_result) {
+      if (item == produtosDB_result[i].produto) {
+        codigo.push(produtosDB_result[i].ID);
+        codigo.push(Number(quantidade));
+      }
+    }
+  }
+  const login_response = await fetch("http:/localhost:3000/usuarios");
+  const login_result = await login_response.json();
+  for (i in login_result) {
+    if (pessoaReconhecida == login_result[i].login) {
+      const response = await fetch("http:/localhost:3000/pedido", {
+        method: "post",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          nome: pessoaReconhecida,
+          codigo: codigo.toString(),
+          data: data,
+        }),
+      });
+      const result = await response.json();
+      adicionarDivida(pessoaReconhecida);
+      for(let j = 0; j < document.getElementsByClassName("itemLista").length; j++){
+        const itens = document.getElementsByClassName("itemLista").item(j);
+        const item = itens.innerText.split(" ")[1];
+        const quantidade = Number(itens.innerText.split(" ")[0]);
+        let dbContador = 0;
+        for(k in produtosDB_result){
+          if(produtosDB_result[k].produto == item){
+            dbContador = produtosDB_result[k].quantidade - quantidade
+          }
+        }
+        const attDividaDB = await fetch("http:/localhost:3000/carrinho", {
+          method: "put",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            produto: item,
+            quantidade_prod: dbContador,
+          }),
+        });
+        const attDividaDB_result = await attDividaDB.json();//NOT USED
+      }
+      alert(result);
+      break;
+    }
+    if(i == login_result.length-1){
+      alert("Usuário ou senha incorretos!")
+    }
+  }
+  removerProdutos();
+  atualizarProdutos();
+  removerCarrinho();
+}
+
 document.getElementById("pedidosLista").addEventListener("click", async(event)=>{
   const response = await fetch("http:/localhost:3000/pedidos");
   const result = await response.json();
@@ -223,9 +295,13 @@ document.getElementById("quantidade_produto").addEventListener("keydown",(event)
   }
 })
 
-const pessoaReconhecida = window.setInterval(async function(){
+window.setInterval(async function(){
   const response = await fetch("http:/localhost:3000/pessoaReconhecida");
   const result = await response.json();
-  console.log(result)
-}, 2000); //2 segundos
+  if(conferePessoa != result){
+    console.log(result)
+    conferePessoa = result;
+    document.getElementById("pessoaReconhecida").innerText = result;
+  }
+}, 1000); //2 segundos
 // clearInterval(pessoaReconhecida) 

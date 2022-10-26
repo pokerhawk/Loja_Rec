@@ -169,12 +169,13 @@ app.post("/pedido", async (req, res)=>{
 ///////////////////////////////////////
 
 //READING FILE//
+
 app.get("/pessoaReconhecida", async(req, res)=>{
   fs.readFile('../face-rec/pessoa.txt', (err, data)=>{
     if(err){
       console.log(err)
     }
-    const textfile = data.toString().split('-');
+    const textfile = data.toString().split();
     const pessoaReconhecida = textfile[textfile.length-1];
     res.json(pessoaReconhecida)
   })
