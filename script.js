@@ -1,4 +1,4 @@
-let conferePessoa = '';
+let conferePessoa = "";
 
 const atualizarProdutos = async () => {
   const divProdutos = document.getElementById("divProdutos");
@@ -26,7 +26,7 @@ const removerProdutos = () => {
 };
 
 const removerCarrinhoBtn = () => {
-  document.getElementById('carrinho').innerHTML ='';
+  document.getElementById("carrinho").innerHTML = "";
 };
 
 const atualizarCarrinhoBtn = async () => {
@@ -40,7 +40,7 @@ const atualizarCarrinhoBtn = async () => {
       produtosDB_result[i].ID == id_produto ||
       produtosDB_result[i].produto == id_produto
     ) {
-      if(quantidade_produto <= produtosDB_result[i].quantidade){
+      if (quantidade_produto <= produtosDB_result[i].quantidade) {
         if (document.getElementsByClassName("itemLista").length == 0) {
           const itemLista = document.createElement("p");
           itemLista.setAttribute("class", "itemLista");
@@ -59,15 +59,24 @@ const atualizarCarrinhoBtn = async () => {
             const oldProduto = itens.innerText.split(" ")[1];
             let verificaNumero = Number(itens.innerText.split(" ")[0]);
             let adicionaValor = verificaNumero + Number(quantidade_produto);
-            if (oldProduto == produtosDB_result[i].produto && adicionaValor<= produtosDB_result[i].quantidade) {
+            if (
+              oldProduto == produtosDB_result[i].produto &&
+              adicionaValor <= produtosDB_result[i].quantidade
+            ) {
               itens.innerText = `${adicionaValor} ${produtosDB_result[i].produto}`;
               break;
             }
-            if(oldProduto == produtosDB_result[i].produto && !adicionaValor <= produtosDB_result[i].quantidade){
+            if (
+              oldProduto == produtosDB_result[i].produto &&
+              !adicionaValor <= produtosDB_result[i].quantidade
+            ) {
               alert("Quantia insuficiente");
               break;
             }
-            if (j == document.getElementsByClassName("itemLista").length-1 && produtosDB_result[i].produto != oldProduto) {
+            if (
+              j == document.getElementsByClassName("itemLista").length - 1 &&
+              produtosDB_result[i].produto != oldProduto
+            ) {
               const itemLista = document.createElement("p");
               itemLista.setAttribute("class", "itemLista");
               const textNode = document.createTextNode(
@@ -80,7 +89,7 @@ const atualizarCarrinhoBtn = async () => {
           }
         }
       } else {
-        alert("Quantia insuficiente")
+        alert("Quantia insuficiente");
       }
     }
   }
@@ -129,14 +138,18 @@ const efetuarCompraBtn = async () => {
       });
       const result = await response.json();
       adicionarDivida(login);
-      for(let j = 0; j < document.getElementsByClassName("itemLista").length; j++){
+      for (
+        let j = 0;
+        j < document.getElementsByClassName("itemLista").length;
+        j++
+      ) {
         const itens = document.getElementsByClassName("itemLista").item(j);
         const item = itens.innerText.split(" ")[1];
         const quantidade = Number(itens.innerText.split(" ")[0]);
         let dbContador = 0;
-        for(k in produtosDB_result){
-          if(produtosDB_result[k].produto == item){
-            dbContador = produtosDB_result[k].quantidade - quantidade
+        for (k in produtosDB_result) {
+          if (produtosDB_result[k].produto == item) {
+            dbContador = produtosDB_result[k].quantidade - quantidade;
           }
         }
         const attDividaDB = await fetch("http:/localhost:3000/carrinho", {
@@ -147,20 +160,20 @@ const efetuarCompraBtn = async () => {
             quantidade_prod: dbContador,
           }),
         });
-        const attDividaDB_result = await attDividaDB.json();//NOT USED
+        const attDividaDB_result = await attDividaDB.json(); //NOT USED
       }
       alert(result);
       break;
     }
-    if(i == login_result.length-1){
-      alert("Usuário ou senha incorretos!")
+    if (i == login_result.length - 1) {
+      alert("Usuário ou senha incorretos!");
     }
   }
   document.getElementById("login_input").value = "";
   document.getElementById("senha_input").value = "";
   removerProdutos();
   atualizarProdutos();
-  removerCarrinho();
+  removerCarrinhoBtn();
 };
 
 const adicionarDivida = async (Usuario) => {
@@ -244,14 +257,18 @@ const reconhecimentoFacialBtn = async () => {
       });
       const result = await response.json();
       adicionarDivida(pessoaReconhecida);
-      for(let j = 0; j < document.getElementsByClassName("itemLista").length; j++){
+      for (
+        let j = 0;
+        j < document.getElementsByClassName("itemLista").length;
+        j++
+      ) {
         const itens = document.getElementsByClassName("itemLista").item(j);
         const item = itens.innerText.split(" ")[1];
         const quantidade = Number(itens.innerText.split(" ")[0]);
         let dbContador = 0;
-        for(k in produtosDB_result){
-          if(produtosDB_result[k].produto == item){
-            dbContador = produtosDB_result[k].quantidade - quantidade
+        for (k in produtosDB_result) {
+          if (produtosDB_result[k].produto == item) {
+            dbContador = produtosDB_result[k].quantidade - quantidade;
           }
         }
         const attDividaDB = await fetch("http:/localhost:3000/carrinho", {
@@ -262,46 +279,58 @@ const reconhecimentoFacialBtn = async () => {
             quantidade_prod: dbContador,
           }),
         });
-        const attDividaDB_result = await attDividaDB.json();//NOT USED
+        const attDividaDB_result = await attDividaDB.json(); //NOT USED
       }
       alert(result);
       break;
     }
-    if(i == login_result.length-1){
-      alert("Usuário ou senha incorretos!")
+    if (i == login_result.length - 1) {
+      alert("Usuário ou senha incorretos!");
     }
   }
   removerProdutos();
   atualizarProdutos();
-  removerCarrinho();
-}
+  removerCarrinhoBtn();
+};
 
-document.getElementById("pedidosLista").addEventListener("click", async(event)=>{
-  const response = await fetch("http:/localhost:3000/pedidos");
-  const result = await response.json();
-  console.log(result)
-})
+document
+  .getElementById("pedidosLista")
+  .addEventListener("click", async (event) => {
+    const response = await fetch("http:/localhost:3000/pedidos");
+    const result = await response.json();
+    console.log(result);
+  });
 
-document.getElementById("senha_input").addEventListener("keydown",function(event){
-  if (event.key == "Enter") {
-    efetuarCompra();
-  }
-})
+document
+  .getElementById("senha_input")
+  .addEventListener("keydown", function (event) {
+    if (event.key == "Enter") {
+      efetuarCompra();
+    }
+  });
 
-document.getElementById("quantidade_produto").addEventListener("keydown",(event)=>{
-  if(event.key == "Enter"){
-    atualizarCarrinho();
-    document.getElementById("id_produto").focus();
-  }
-})
+document
+  .getElementById("quantidade_produto")
+  .addEventListener("keydown", (event) => {
+    if (event.key == "Enter") {
+      atualizarCarrinho();
+      document.getElementById("id_produto").focus();
+    }
+  });
 
-window.setInterval(async function(){
+window.setInterval(async function () {
   const response = await fetch("http:/localhost:3000/pessoaReconhecida");
   const result = await response.json();
-  if(conferePessoa != result){
-    console.log(result)
+  if (conferePessoa != result) {
+    console.log(result);
     conferePessoa = result;
     document.getElementById("pessoaReconhecida").innerText = result;
   }
 }, 1000); //2 segundos
-// clearInterval(pessoaReconhecida) 
+// clearInterval(pessoaReconhecida)
+
+async function usuariosLista() {
+  const response = await fetch("http:/localhost:3000/usuarios");
+  const result = await response.json();
+  console.log(result);
+}
