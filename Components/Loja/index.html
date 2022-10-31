@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style.css">
+    <script defer src="./script.js"></script>
+    <title>Loja de compra</title>
+</head>
+<body>
+    <header>
+    </header>
+    <main>
+        <div id="divProdutos">
+            <h2>Produtos</h2>
+        </div>
+        <aside>
+            <div>
+                <h2>Carrinho</h2>
+                <label for="">Produto:</label>
+                <input type="text" id="id_produto" placeholder="Produto">
+                <br>
+                <label for="">Quantidade:</label>
+                <input type="text" id="quantidade_produto" placeholder="Quantidade">
+                <br>
+                <button type="button" onclick="atualizarCarrinhoBtn()">Adicionar ao Carrinho</button>
+                <div id="carrinho">
+                </div>
+                <button type="button" onclick="removerCarrinhoBtn()">Limpar Carrinho</button>
+            </div>
+            <div id="divEfetuarCompra">
+                <h2>Compre</h2>
+                <label>Nome:</label>
+                <input type="text" name="nome" id="login_input" placeholder="Nome">
+                <br>
+                <label>Senha:</label>
+                <input type="password" name="senha" id="senha_input" placeholder="Senha">
+                <br>
+                <button type="button" onclick="efetuarCompraBtn()">Efetuar Compra</button>
+                <br>
+                <button type="button" onclick="reconhecimentoFacialBtn()">Comprar com reconhecimento facial</button>
+                <p>pessoa reconhecida no momento: <p id="pessoaReconhecida"></p></p>
+            </div>
+        </aside>
+    </main>
+    <footer>
+        <h1>
+            <a href="../../index.html">Voltar</a>
+        </h1>
+    </footer>
+
+</body>
+</html>

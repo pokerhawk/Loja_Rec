@@ -43,7 +43,7 @@ while True:
         cv2.rectangle(frame,(x1, y1), (x2, y2), (0, 0, 200), 4) #location, color, thickness
         name_output = name
         if name_output != eval_name_output:
-            f = open("pessoa.txt", "w") # modes : a, r, w, +
+            f = open("pessoa.txt", "w")
             f.write(name_output)
             f.close()
             eval_name_output = name

@@ -1,4 +1,4 @@
-//const { exec } = require('child_process');
+const { exec } = require("child_process");
 const fs = require("fs");
 const express = require("express"); // remove cors and pg-promise
 var cors = require("cors");
@@ -102,14 +102,14 @@ app.post("/cadastro", async (req, res) => {
       console.log(err);
       return res.json("Login existente, tente novamente!");
     });
-  // exec(imagem, (err, stdout, stderr) => {
-  //   if (err) {
-  //     console.error(err)
-  //   } else {
-  //     console.log(`stdout: ${stdout}`);
-  //     console.log(`stderr: ${stderr}`);
-  //   }
-  // });
+  exec(imagem, (err, stdout, stderr) => {
+    if (err) {
+      console.error(err);
+    } else {
+      console.log(`stdout: ${stdout}`);
+      console.log(`stderr: ${stderr}`);
+    }
+  });
 });
 
 app.post("/pedido", async (req, res) => {

@@ -6,55 +6,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./style.css">
     <script defer src="./script.js"></script>
-    <title>Loja de compra</title>
+    <title>Acesso</title>
 </head>
 <body>
     <header>
-        <div>
-            <big>
-                <a href="./Components/Cadastro/index.html">Cadastre-se aqui!</a>
-            </big>
-            <big>
-                <a href="./Components/Divida/index.html">Confira sua divida aqui!</a>
-            </big>
-        </div>
+        <a href="./Components/Cadastro/index.html">Cadastrar-se</a>
     </header>
-    <main>
-        <div id="divProdutos">
-            <h2>Produtos</h2>
-        </div>
-        <aside>
-            <div>
-                <h2>Carrinho</h2>
-                <label for="">Produto:</label>
-                <input type="text" id="id_produto" placeholder="Produto">
-                <br>
-                <label for="">Quantidade:</label>
-                <input type="text" id="quantidade_produto" placeholder="Quantidade">
-                <br>
-                <button type="button" onclick="atualizarCarrinhoBtn()">Adicionar ao Carrinho</button>
-                <div id="carrinho">
-                </div>
-                <button type="button" onclick="removerCarrinhoBtn()">Limpar Carrinho</button>
+    <article>
+        <main>
+            <div id="divLogar">
+                <fieldset id="sign_up">
+                    <legend>Logar</legend>
+                    <div>
+                    <label htmlFor="email-address">Login</label>
+                    <input type="email" name="email-address" id="login"/>
+                    </div>
+                    <div>
+                    <label htmlFor="password">Senha</label>
+                    <input type="password" name="password" id="senha"/>
+                    </div>
+                    <input onclick="logar()" type="submit" value="Logar" id="button"/>
+                    ou
+                    <input onclick="logarADM()" type="submit" value="Logar como ADM" id="button"/>
+                    <p id="pessoaReconhecida">Olá</p>
+                </fieldset>
             </div>
-            <div id="divEfetuarCompra">
-                <h2>Compre</h2>
-                <label>Nome:</label>
-                <input type="text" name="nome" id="login_input" placeholder="Nome">
-                <br>
-                <label>Senha:</label>
-                <input type="password" name="senha" id="senha_input" placeholder="Senha">
-                <br>
-                <button type="button" onclick="efetuarCompraBtn()">Efetuar Compra</button>
-                <br>
-                <button type="button" onclick="reconhecimentoFacialBtn()">Comprar com reconhecimento facial</button>
-                <p>pessoa reconhecida no momento: <p id="pessoaReconhecida"></p></p>
-            </div>
-        </aside>
-    </main>
-    <footer>
-        <button type="button" id="pedidosLista">Pedidos Lista</button>
-        <button type="button" onclick="usuariosLista()">Usuários</button>
-    </footer>
+        </main>
+    </article>
 </body>
 </html>

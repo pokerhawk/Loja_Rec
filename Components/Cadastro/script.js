@@ -1,8 +1,8 @@
 const cadastrar = async () => {
   const cadastro_nome = document.getElementById("cadastro_nome").value;
   const cadastro_senha = document.getElementById("cadastro_senha").value;
-  const imagem = document.getElementById("imageFile").files[0]; // C
-  let formData = new FormData(); // Check
+  const imagem = document.getElementById("imageFile").files[0];
+  let formData = new FormData();
   formData.append("fileToUpload", imagem);
   const response = await fetch("http:/localhost:3000/cadastro", {
     method: "post",
@@ -10,7 +10,7 @@ const cadastrar = async () => {
     body: JSON.stringify({
       nome: cadastro_nome,
       senha: cadastro_senha,
-      // imagem: formData // OLHAR ISSO
+      imagem: formData
     }),
   });
   const result = await response.json();
