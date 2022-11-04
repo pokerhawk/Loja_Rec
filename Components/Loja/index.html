@@ -12,35 +12,40 @@
     <header>
     </header>
     <main>
-        <div id="divProdutos">
-            <h2>Produtos</h2>
-        </div>
+        <section>
+            <div id="divProdutos">
+                <h2>Produtos</h2>
+            </div>
+        </section>
         <aside>
             <div>
-                <h2>Carrinho</h2>
-                <label for="">Produto:</label>
-                <input type="text" id="id_produto" placeholder="Produto">
-                <br>
-                <label for="">Quantidade:</label>
-                <input type="text" id="quantidade_produto" placeholder="Quantidade">
-                <br>
-                <button type="button" onclick="atualizarCarrinhoBtn()">Adicionar ao Carrinho</button>
-                <div id="carrinho">
-                </div>
-                <button type="button" onclick="removerCarrinhoBtn()">Limpar Carrinho</button>
+                <fieldset>
+                    <legend><h1>Carrinho:</h1></legend>
+                    <label for="">Produto:</label>
+                    <select name="Produto" id="id_produto_test"></select>
+                    <br>
+                    <label for="">Quantidade:</label>
+                    <input type="text" id="quantidade_produto" placeholder="Quantidade">
+                    <br>
+                    <button type="button" onclick="atualizarCarrinhoBtn()">Adicionar ao Carrinho</button>
+                    <div id="carrinho"></div>
+                    <div id="buttonDiv"></div>
+                </fieldset>
             </div>
             <div id="divEfetuarCompra">
-                <h2>Compre</h2>
-                <label>Nome:</label>
-                <input type="text" name="nome" id="login_input" placeholder="Nome">
-                <br>
-                <label>Senha:</label>
-                <input type="password" name="senha" id="senha_input" placeholder="Senha">
-                <br>
-                <button type="button" onclick="efetuarCompraBtn()">Efetuar Compra</button>
-                <br>
-                <button type="button" onclick="reconhecimentoFacialBtn()">Comprar com reconhecimento facial</button>
-                <p>pessoa reconhecida no momento: <p id="pessoaReconhecida"></p></p>
+                <fieldset>
+                    <legend><h1>Compre</h1></legend>
+                    <label>Nome:</label>
+                    <input type="text" name="nome" id="login_input" placeholder="Nome">
+                    <br>
+                    <label>Senha:</label>
+                    <input type="password" name="senha" id="senha_input" placeholder="Senha">
+                    <br>
+                    <button type="button" onclick="efetuarCompraBtn()">Efetuar Compra</button>
+                    <br>
+                    <button type="button" onclick="reconhecimentoFacialBtn()">Comprar com reconhecimento facial</button>
+                    <p>pessoa reconhecida no momento: <p id="pessoaReconhecida"></p></p>
+                </fieldset>
             </div>
         </aside>
     </main>

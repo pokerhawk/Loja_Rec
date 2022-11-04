@@ -5,3 +5,9 @@ footer {
     position: fixed;
     bottom: 0;
 }
+
+.form-center {
+    margin-top: 10%;
+    display: flex;
+    justify-content: center;
+}

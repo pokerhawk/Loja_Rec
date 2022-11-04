@@ -12,7 +12,6 @@ const logar = async () => {
       location.href = "./Components/Loja/index.html";
     }
   }
-  //blaah
 };
 
 const logarADM = async () => {

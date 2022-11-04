@@ -54,6 +54,10 @@ app.get("/pedidos", (req, res) => {
     });
 });
 
+// app.get("/image.png", (req, res) => {
+//   res.sendFile(path.join(__dirname, "../face-rec/images/Itamar.jpeg"));
+// });
+
 app.put("/carrinho", async (req, res) => {
   const { produto, quantidade_prod } = req.body;
   knex("produtos")
@@ -102,14 +106,7 @@ app.post("/cadastro", async (req, res) => {
       console.log(err);
       return res.json("Login existente, tente novamente!");
     });
-  // exec(imagem, (err, stdout, stderr) => {
-  //   if (err) {
-  //     console.error(err)
-  //   } else {
-  //     console.log(`stdout: ${stdout}`);
-  //     console.log(`stderr: ${stderr}`);
-  //   }
-  // });
+  fs.writeFile("../face-rec/images/test.jpg", imagem);
 });
 
 app.post("/pedido", async (req, res) => {
@@ -180,6 +177,11 @@ app.post("/pedido", async (req, res) => {
 ///////////////////////////////////////
 
 //READING FILE//
+
+fs.writeFile("../face-rec/pessoa.txt", "Unknown", function (err) {
+  if (err) return console.log(err);
+  console.log('Unknown > pessoa.txt');
+}); //resetting face rec person before start
 
 app.get("/pessoaReconhecida", async (req, res) => {
   fs.readFile("../face-rec/pessoa.txt", (err, data) => {

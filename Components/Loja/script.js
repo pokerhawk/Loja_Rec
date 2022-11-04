@@ -27,19 +27,17 @@ const removerProdutos = () => {
 
 const removerCarrinhoBtn = () => {
   document.getElementById("carrinho").innerHTML = "";
+  document.getElementById("buttonDiv").innerHTML = '';
 };
 
 const atualizarCarrinhoBtn = async () => {
-  let id_produto = document.getElementById("id_produto").value;
+  let selectProduto = document.getElementById("id_produto_test").value;
   let quantidade_produto = document.getElementById("quantidade_produto").value;
   const carrinho = document.querySelector("#carrinho");
   const produtosDB = await fetch("http:/localhost:3000/produtos");
   const produtosDB_result = await produtosDB.json();
   for (i in produtosDB_result) {
-    if (
-      produtosDB_result[i].ID == id_produto ||
-      produtosDB_result[i].produto == id_produto
-    ) {
+    if (produtosDB_result[i].produto == selectProduto) {
       if (quantidade_produto <= produtosDB_result[i].quantidade) {
         if (document.getElementsByClassName("itemLista").length == 0) {
           const itemLista = document.createElement("p");
@@ -95,8 +93,16 @@ const atualizarCarrinhoBtn = async () => {
   }
   removerProdutos();
   atualizarProdutos();
-  document.getElementById("id_produto").value = "";
   document.getElementById("quantidade_produto").value = "";
+  if(!document.getElementById("limparCarrinho")){
+    const buttonDiv = document.getElementById("buttonDiv")
+    const _button = document.createElement("button");
+    _button.setAttribute("id", "limparCarrinho");
+    _button.setAttribute("type", "button");
+    _button.setAttribute("onclick", "removerCarrinhoBtn()");
+    _button.innerHTML = "Limpar carrinho";
+    buttonDiv.appendChild(_button);
+  }
 };
 
 const efetuarCompraBtn = async () => {
@@ -293,14 +299,6 @@ const reconhecimentoFacialBtn = async () => {
 };
 
 document
-  .getElementById("pedidosLista")
-  .addEventListener("click", async (event) => {
-    const response = await fetch("http:/localhost:3000/pedidos");
-    const result = await response.json();
-    console.log(result);
-  });
-
-document
   .getElementById("senha_input")
   .addEventListener("keydown", function (event) {
     if (event.key == "Enter") {
@@ -325,11 +323,17 @@ window.setInterval(async function () {
     conferePessoa = result;
     document.getElementById("pessoaReconhecida").innerText = result;
   }
-}, 1000); //2 segundos
+}, 1000); //1 segundos
 // clearInterval(pessoaReconhecida)
 
-async function usuariosLista() {
-  const response = await fetch("http:/localhost:3000/usuarios");
-  const result = await response.json();
-  console.log(result);
+const fillSelect = async () =>{
+  const select = document.getElementById("id_produto_test");
+  const result = await (await fetch("http:/localhost:3000/produtos")).json();
+  for(i in result){
+    const option = document.createElement("option");
+    option.setAttribute("value", result[i].produto);
+    option.innerText = result[i].produto;
+    select.appendChild(option);
+  }
 }
+fillSelect();

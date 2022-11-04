@@ -1,7 +1,16 @@
 html{
     background-color: gray;
 }
-
+section{ 
+    height: 200px; /* altura */
+    width: 70%; /* largura */
+    float:left; /* alinhar à esquerda */
+}
+aside{ 
+    height: 200px; /* altura */
+    width: 30%; /* largura */
+    float:right; /* alinhar à direita */
+}
 footer{
     position: fixed;
     bottom: 0;

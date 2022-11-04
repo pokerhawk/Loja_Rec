@@ -8,20 +8,30 @@
     <title>Cadastro</title>
 </head>
 <body>
-    <form action="" method="get">
-        <h1>Cadastre-se</h1>
-        <input type="text" placeholder="Login" id="cadastro_nome">
-        <br>
-        <input type="password" placeholder="Senha" id="cadastro_senha">
-        <br>
-        <h2>Escolha uma foto:</h2>
-        <label for="imageFile">Precisamos de uma foto frontal para o reconhecimento facial:</label>
-        <br>
-        <input type="file" id="imageFile" accept=".jpg, .jpeg, .png" />
-        <br>
-        <br>
-        <button type="button" onclick="cadastrar()">Enviar</button>
-    </form>
+    <article>
+        <main>
+            <div class="form-center">
+                <fieldset>
+                    <legend><h1>Cadastre-se</h1></legend>
+                    <form action="" method="get">
+                        <label htmlFor="email-address">Login</label>
+                        <input type="text" placeholder="Login" id="cadastro_nome">
+                        <br>
+                        <label htmlFor="email-address">Senha</label>
+                        <input type="password" placeholder="Senha" id="cadastro_senha">
+                        <br>
+                        <h2>Escolha uma foto:</h2>
+                        <label for="imageFile">Precisamos de uma foto frontal para o reconhecimento facial:</label>
+                        <br>
+                        <input type="file" id="imageFile" onchange="previewFile()" accept=".jpg, .jpeg, .png"/><br>
+                        <img src="" height="200" alt="" />
+                        <br>
+                        <button type="button" onclick="cadastrar()">Enviar</button>
+                    </form>
+                </fieldset>
+            </div>
+        </main>
+    </article>
     <footer>
         <h1>
             <a href="../../index.html">Voltar</a>
