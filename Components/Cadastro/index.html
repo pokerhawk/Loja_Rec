@@ -13,7 +13,7 @@
             <div class="form-center">
                 <fieldset>
                     <legend><h1>Cadastre-se</h1></legend>
-                    <form action="" method="get">
+                    <form action="" method="post" enctype="">
                         <label htmlFor="email-address">Login</label>
                         <input type="text" placeholder="Login" id="cadastro_nome">
                         <br>
@@ -23,7 +23,7 @@
                         <h2>Escolha uma foto:</h2>
                         <label for="imageFile">Precisamos de uma foto frontal para o reconhecimento facial:</label>
                         <br>
-                        <input type="file" id="imageFile" onchange="previewFile()" accept=".jpg, .jpeg, .png"/><br>
+                        <input name="image" type="file" id="imageFile" onchange="previewFile()"/><br>
                         <img src="" height="200" alt="" />
                         <br>
                         <button type="button" onclick="cadastrar()">Enviar</button>

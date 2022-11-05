@@ -1,7 +1,23 @@
 //const { exec } = require('child_process');
 const fs = require("fs");
-const express = require("express"); // remove cors and pg-promise
-var cors = require("cors");
+const express = require("express"); 
+const cors = require("cors"); //remove cors and pg-promise
+const path = require("path");
+const multer  = require('multer')
+// const uploadFolder = path.resolve(__dirname, "../face-rec/images")
+// const storage = multer.diskStorage({
+//   // destination: function(req, file, callback) {
+//   //   callback(null, '../face-rec/images');
+//   // }
+//   destination: uploadFolder,
+//   filename: function (req, file, callback) {
+//     callback(null, file.fieldname);
+//     // callback(null, path.extname(file.originalname));
+//     // callback(null, this.nome);
+//   }
+// });
+// const upload = multer({storage: storage}) //The storage -> storage(const)
+const upload = multer({dest: 'images/'})
 const app = express();
 const port = 3000;
 const knex = require("knex")({
@@ -16,7 +32,7 @@ const knex = require("knex")({
 });
 app.use(cors());
 app.use(express.json());
-////////////////////////////////////// SERVER
+////////////////////////////////////// GET //////////////////////////////////////
 
 app.get("/usuarios", (req, res) => {
   knex
@@ -58,6 +74,8 @@ app.get("/pedidos", (req, res) => {
 //   res.sendFile(path.join(__dirname, "../face-rec/images/Itamar.jpeg"));
 // });
 
+////////////////////////////////////// PUT //////////////////////////////////////
+
 app.put("/carrinho", async (req, res) => {
   const { produto, quantidade_prod } = req.body;
   knex("produtos")
@@ -84,30 +102,35 @@ app.put("/atualizaDivida", async (req, res) => {
     });
 });
 
-app.post("/cadastro", async (req, res) => {
-  const { nome, senha, imagem } = req.body;
+////////////////////////////////////// POST //////////////////////////////////////
+
+app.post('/cadastro', async(req, res)=>{
+  const {nome, senha} = req.body;
   if (!nome || !senha) {
     return res.status(400).json("Dados incorretos!");
   }
-  knex
-    .transaction((trx) => {
-      trx
-        .insert({
-          login: nome,
-          senha: senha,
-          divida: 0,
-        })
-        .into("usuarios")
-        .then(trx.commit)
-        .catch(trx.rollback)
-        .then(res.json("Cadastrado com sucesso!"));
+  knex.transaction((trx)=>{
+    trx.insert({
+      login: nome,
+      senha: senha,
+      divida: 0,
     })
-    .catch((err) => {
-      console.log(err);
-      return res.json("Login existente, tente novamente!");
-    });
-  fs.writeFile("../face-rec/images/test.jpg", imagem);
-});
+    .into("usuarios")
+    .then(trx.commit)
+    .catch(trx.rollback)
+    .then(res.json("Cadastrado com sucesso!"));
+  })
+  .catch((err) => {
+    console.log(err);
+    return res.json("Login existente, tente novamente!");
+  });
+})
+
+app.post('/image', upload.single('image'),async(req, res, next)=>{
+  req.file;
+  console.log("deu")
+  res.json("Imagem Upada")
+})
 
 app.post("/pedido", async (req, res) => {
   const nome = req.body.nome;
@@ -135,6 +158,8 @@ app.post("/pedido", async (req, res) => {
     });
 });
 
+////////////////////////////////////// DELETE //////////////////////////////////////
+
 // app.delete('/deletarUsuario', (req, res)=>{ // CHECK
 //   knex('usuarios').dropColumn().where('nome', 'joao');
 //   knex('usuarios').where('nome', 'joao').del()
@@ -142,17 +167,17 @@ app.post("/pedido", async (req, res) => {
 //   .catch(err=>{console.log(err)})
 // })
 
-////////////////////////////////////// CONSOLE LOG DISPLAYS
+////////////////////////////////////// LOGS //////////////////////////////////////
 
-// knex
-// .select("*")
-// .from("usuarios")
-// .then((data) => {
-//   console.log(data);
-// })
-// .catch((error) => {
-//   console.log(error);
-// });
+knex
+.select("*")
+.from("usuarios")
+.then((data) => {
+  console.log(data);
+})
+.catch((error) => {
+  console.log(error);
+});
 
 // knex
 // .select("*")
@@ -174,9 +199,7 @@ app.post("/pedido", async (req, res) => {
 //   console.log(data)
 // })
 
-///////////////////////////////////////
-
-//READING FILE//
+////////////////////////////////////// FS //////////////////////////////////////
 
 fs.writeFile("../face-rec/pessoa.txt", "Unknown", function (err) {
   if (err) return console.log(err);
