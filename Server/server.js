@@ -1,23 +1,21 @@
 //const { exec } = require('child_process');
 const fs = require("fs");
-const express = require("express"); 
+const express = require("express");
 const cors = require("cors"); //remove cors and pg-promise
 const path = require("path");
-const multer  = require('multer')
-// const uploadFolder = path.resolve(__dirname, "../face-rec/images")
-// const storage = multer.diskStorage({
-//   // destination: function(req, file, callback) {
-//   //   callback(null, '../face-rec/images');
-//   // }
-//   destination: uploadFolder,
-//   filename: function (req, file, callback) {
-//     callback(null, file.fieldname);
-//     // callback(null, path.extname(file.originalname));
-//     // callback(null, this.nome);
-//   }
-// });
-// const upload = multer({storage: storage}) //The storage -> storage(const)
-const upload = multer({dest: 'images/'})
+const multer = require("multer");
+const uploadFolder = path.resolve(__dirname, "../face-rec/images")
+const storage = multer.diskStorage({
+  // destination: function(req, file, callback) {
+  //   callback(null, '../face-rec/images');
+  // }
+  destination: uploadFolder,
+  filename: function (req, file, callback) {
+    callback(null, file.originalname);
+  }
+});
+const upload = multer({storage: storage}) //The storage -> storage(const)
+// const upload = multer({ dest: "images/" });
 const app = express();
 const port = 3000;
 const knex = require("knex")({
@@ -70,7 +68,7 @@ app.get("/pedidos", (req, res) => {
     });
 });
 
-// app.get("/image.png", (req, res) => {
+// app.get("/testImage", (req, res) => {
 //   res.sendFile(path.join(__dirname, "../face-rec/images/Itamar.jpeg"));
 // });
 
@@ -104,33 +102,36 @@ app.put("/atualizaDivida", async (req, res) => {
 
 ////////////////////////////////////// POST //////////////////////////////////////
 
-app.post('/cadastro', async(req, res)=>{
-  const {nome, senha} = req.body;
+app.post("/image", upload.single("image"), async (req, res, next) => {
+  const image = req.file;
+  console.log(image);
+  console.log(JSON.stringify(req.body));
+  res.json("Ok");
+});
+
+app.post("/cadastro", async (req, res) => {
+  const { nome, senha } = req.body;
   if (!nome || !senha) {
     return res.status(400).json("Dados incorretos!");
   }
-  knex.transaction((trx)=>{
-    trx.insert({
-      login: nome,
-      senha: senha,
-      divida: 0,
+  knex
+    .transaction((trx) => {
+      trx
+        .insert({
+          login: nome,
+          senha: senha,
+          divida: 0,
+        })
+        .into("usuarios")
+        .then(trx.commit)
+        .catch(trx.rollback)
+        .then(res.json("Cadastrado com sucesso!"));
     })
-    .into("usuarios")
-    .then(trx.commit)
-    .catch(trx.rollback)
-    .then(res.json("Cadastrado com sucesso!"));
-  })
-  .catch((err) => {
-    console.log(err);
-    return res.json("Login existente, tente novamente!");
-  });
-})
-
-app.post('/image', upload.single('image'),async(req, res, next)=>{
-  req.file;
-  console.log("deu")
-  res.json("Imagem Upada")
-})
+    .catch((err) => {
+      console.log(err);
+      return res.json("Login existente, tente novamente!");
+    });
+});
 
 app.post("/pedido", async (req, res) => {
   const nome = req.body.nome;
@@ -170,14 +171,14 @@ app.post("/pedido", async (req, res) => {
 ////////////////////////////////////// LOGS //////////////////////////////////////
 
 knex
-.select("*")
-.from("usuarios")
-.then((data) => {
-  console.log(data);
-})
-.catch((error) => {
-  console.log(error);
-});
+  .select("*")
+  .from("usuarios")
+  .then((data) => {
+    console.log(data);
+  })
+  .catch((error) => {
+    console.log(error);
+  });
 
 // knex
 // .select("*")
@@ -203,7 +204,7 @@ knex
 
 fs.writeFile("../face-rec/pessoa.txt", "Unknown", function (err) {
   if (err) return console.log(err);
-  console.log('Unknown > pessoa.txt');
+  console.log("Unknown > pessoa.txt");
 }); //resetting face rec person before start
 
 app.get("/pessoaReconhecida", async (req, res) => {
@@ -217,7 +218,7 @@ app.get("/pessoaReconhecida", async (req, res) => {
   });
 });
 
-///////////////////////////////////////
+////////////////////////////////////// LISTEN //////////////////////////////////////
 app.listen(port, () => {
   console.log(`Server running at https:localhost:${port}`);
 });
