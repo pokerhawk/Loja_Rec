@@ -1,9 +1,6 @@
 const cadastrar = async () => {
   const cadastro_nome = document.getElementById("cadastro_nome").value;
   const cadastro_senha = document.getElementById("cadastro_senha").value;
-  // const imagemData = document.getElementById("imageFile").files[0];
-  // const fd = new FormData();
-  // fd.append("image", imagemData);
   const response = await fetch("http:/localhost:3000/cadastro", {
     method: "post",
     headers: { "Content-Type": "application/json" },
@@ -18,7 +15,25 @@ const cadastrar = async () => {
   alert(result);
 };
 
-function previewFile() {
+const enviarFoto = async () =>{
+  const fd = new FormData();
+  // const xhr = new XMLHttpRequest();
+  const imagemData = document.getElementById("imageFile").files[0];
+  fd.append("image", imagemData);
+  // xhr.open("POST", "./image", true);
+  // xhr.onreadystatechange = function (response) {
+  //   document.getElementById("result").innerHTML = xhr.responseText
+  //   console.log(xhr.responseText)
+  // };
+  // xhr.send(fd);
+  const result = await (await fetch("http:/localhost:3000/image", {
+    method: "post",
+    body: fd
+  })).json();
+  console.log(result)
+}
+
+const previewFile = () =>{
   const preview = document.querySelector("img");
   const file = document.querySelector("input[type=file]").files[0];
   const reader = new FileReader();

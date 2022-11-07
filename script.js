@@ -23,8 +23,10 @@ const logarADM = async () => {
       conferePessoa == "eliabe"
     ) {
       location.href = "./Components/AcessoADM/index.html";
+      break;
     } else {
       alert("Não é um administrador! ou informações incorretas");
+      break;
     }
   }
 };
