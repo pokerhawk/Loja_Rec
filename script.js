@@ -10,6 +10,9 @@ const logar = async () => {
       (response[i].login == login && response[i].senha == senha)
     ) {
       location.href = "./Components/Loja/index.html";
+    } else {
+      alert("Usuário e senha errados ou inexistentes")
+      break;
     }
   }
 };

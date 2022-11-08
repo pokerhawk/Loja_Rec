@@ -12,6 +12,7 @@
     <header>
         <button type="button" id="pedidosLista">Pedidos Lista</button>
         <button type="button" onclick="usuariosLista()">Usuários</button>
+        <button type="button" onclick="mostrarProdutos()">Produtos</button>
     </header>
     <main>
         <section>
@@ -19,10 +20,51 @@
                 <h1>Pedidos por usuário:</h1>
                 <input type="text" id="usuario" placeholder="Usuário">
             </div>
+            <hr>
+            <div>
+                <h1>Adicionar Produto</h1>
+                <label for="produto">Produto:</label>
+                <input type="text" placeholder="Nome_Produto" id="addProduto"><br>
+                <label for="quantidade">Quantidade:</label>
+                <input type="text" placeholder="Somente Número" id="addQuantidade"><br>
+                <label for="preco">Preço:</label>
+                <input type="text" placeholder="Somente Número" id="addPreco"><br>
+                <p>Obs.: Valor de preço deve ser com ponto e não com virgula<br>Ex.:<br>Correto: 5.25<br>Errado:5,25</p>
+                <button type="button" onclick="addProduto()">Adicionar</button>
+            </div>
+            <hr>
+            <div>
+                <h1>Atualizar Produto:</h1>
+                <label for="">Produto:</label>
+                <select name="Produto" id="produto_select"></select><br>
+                <label for="">Quantidade:</label>
+                <input type="text" placeholder="Nova Quantidade" id="novaQuantidade"><br>
+                <label for="">Preço:</label>
+                <input type="text" placeholder="Novo Preço" id="novoPreco"><br>
+                <button type="button" onclick="attProduto()">Atualizar Produto</button>
+                <p>Obs.: Caso queira atualizar somente 1 valor, deixe o outro vazio</p>
+            </div>
+            <hr>
+            <div>
+                <h1>Remover Produto</h1>
+                <select name="Produto" id="produto_select2"></select>
+                <button type="button" onclick="delProduto()">Deletar Produto</button>
+            </div>
         </section>
         <aside>
             <div id="listaUsuarios">
                 <h2>Lista Usuários:</h2>
+            </div>
+            <div>
+                <h2>Modificar Usuário</h2>
+                <label for="">Mudar Dívida</label>
+                <select name="Usuario" id="attDividaUsuario"></select><br>
+                <input type="text" id="attDivida" placeholder="Valor">
+                <button onclick="attDividaADM()">Enviar</button>
+                <hr>
+                <label for="">Deletar Usuário</label>
+                <input type="text" id="delUsuario" placeholder="Usuário">
+                <button onclick="delUsuario()">Deletar Usuário</button>
             </div>
         </aside>
     </main>

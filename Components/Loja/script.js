@@ -11,7 +11,7 @@ const atualizarProdutos = async () => {
     const produtos = document.getElementById("produtos");
     const li = document.createElement("li");
     const text = document.createTextNode(
-      `${result[i].quantidade} ${result[i].produto} - ${result[i].preco}R$ | ID Produto: ${result[i].ID}`
+      `Qnt:${result[i].quantidade} - ${result[i].produto} || ${result[i].preco}R$`
     );
     li.appendChild(text);
     produtos.appendChild(li);
@@ -19,19 +19,8 @@ const atualizarProdutos = async () => {
 };
 atualizarProdutos();
 
-const removerProdutos = () => {
-  const divProdutos = document.getElementById("divProdutos");
-  const produtos = document.getElementById("produtos");
-  divProdutos.removeChild(produtos);
-};
-
-const removerCarrinhoBtn = () => {
-  document.getElementById("carrinho").innerHTML = "";
-  document.getElementById("buttonDiv").innerHTML = '';
-};
-
 const atualizarCarrinhoBtn = async () => {
-  let selectProduto = document.getElementById("id_produto_test").value;
+  let selectProduto = document.getElementById("produto_select").value;
   let quantidade_produto = document.getElementById("quantidade_produto").value;
   const carrinho = document.querySelector("#carrinho");
   const produtosDB = await fetch("http:/localhost:3000/produtos");
@@ -298,6 +287,17 @@ const reconhecimentoFacialBtn = async () => {
   removerCarrinhoBtn();
 };
 
+const removerProdutos = () => {
+  const divProdutos = document.getElementById("divProdutos");
+  const produtos = document.getElementById("produtos");
+  divProdutos.removeChild(produtos);
+};
+
+const removerCarrinhoBtn = () => {
+  document.getElementById("carrinho").innerHTML = "";
+  document.getElementById("buttonDiv").innerHTML = '';
+};
+
 document
   .getElementById("senha_input")
   .addEventListener("keydown", function (event) {
@@ -311,7 +311,6 @@ document
   .addEventListener("keydown", (event) => {
     if (event.key == "Enter") {
       atualizarCarrinhoBtn();
-      document.getElementById("id_produto").focus();
     }
   });
 
@@ -327,7 +326,7 @@ window.setInterval(async function () {
 // clearInterval(pessoaReconhecida)
 
 const fillSelect = async () =>{
-  const select = document.getElementById("id_produto_test");
+  const select = document.getElementById("produto_select");
   const result = await (await fetch("http:/localhost:3000/produtos")).json();
   for(i in result){
     const option = document.createElement("option");

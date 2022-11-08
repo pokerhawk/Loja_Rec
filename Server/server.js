@@ -94,11 +94,46 @@ app.put("/atualizaDivida", async (req, res) => {
     .update({
       divida: cost,
     })
-    .then(res.json("Divida Atualizado"))
+    .then(res.json("Divida Atualizada"))
     .catch((err) => {
       res.json(`ERROR: ${err}`);
     });
 });
+
+app.put("/attProduto", async (req, res)=>{
+  const {produto, quantidade, preco} = req.body;
+  if(preco && quantidade == undefined){
+    knex("produtos").where("produto", produto)
+    .update({
+      preco: preco
+    }).then(res.json("Preço Atualizado"))
+    .catch((err)=>{res.json(err)})
+  }
+  if(preco == undefined && quantidade){
+    knex("produtos").where("produto", produto)
+    .update({
+      quantidade: quantidade
+    }).then(res.json("Quantidade Atualizado"))
+    .catch((err)=>{res.json(err)})
+  }
+  if(preco != undefined && quantidade != undefined){
+    knex("produtos").where("produto", produto)
+    .update({
+      quantidade: quantidade,
+      preco: preco
+    }).then(res.json("Preço Atualizado"))
+    .catch((err)=>{res.json(err)})
+  }
+});
+
+app.put("/attDividaADM", async (req, res)=>{
+  const {usuario, divida} = req.body;
+  knex("usuarios").where("login", usuario)
+  .update({
+    divida: divida
+  }).then(res.json("Dívida Atualizada"))
+  .catch(err=>{res.json(err)})
+})
 
 ////////////////////////////////////// POST //////////////////////////////////////
 
@@ -159,14 +194,52 @@ app.post("/pedido", async (req, res) => {
     });
 });
 
+app.post("/addProduto", async (req, res)=>{
+  const {produto, quantidade, preco} = req.body;
+  if (!produto || !quantidade || !preco) {
+    return res.status(400).json("Faltam dados!");
+  }
+  knex.transaction((trx)=>{
+    trx.insert({
+      produto: produto,
+      quantidade: quantidade,
+      preco: preco
+    }).into("produtos")
+    .then(trx.commit)
+    .catch(trx.rollback)
+    .then(res.json("Produto adicionado"))
+  })
+})
+
 ////////////////////////////////////// DELETE //////////////////////////////////////
 
-// app.delete('/deletarUsuario', (req, res)=>{ // CHECK
-//   knex('usuarios').dropColumn().where('nome', 'joao');
-//   knex('usuarios').where('nome', 'joao').del()
-//   .then(res=>{console.log(res)})
-//   .catch(err=>{console.log(err)})
-// })
+app.delete('/deletarUsuario', async (req, res)=>{ // CHECK
+  const usuario = req.body.usuarioDel;
+  knex('usuarios').del().where('login', usuario)
+  .then(data=>{
+    if(data == 1){
+      res.json("Deletado com sucesso")
+    }
+    if(data == 0){
+      res.json("Usuário não existe ou Informação incorreta")
+    }
+  })
+  .catch(err=>{console.log(err)})
+})
+
+app.delete('/deletarProduto', async (req, res)=>{
+  const produto = req.body.produtoDel;
+  knex('produtos').del().where('produto', produto)
+  .then(data=>{
+    if(data == 1){
+      res.json("Deletado com sucesso")
+    }
+    if(data == 0){
+      res.json("Algo deu errado")
+    }
+  })
+  .catch(err=>{console.log(err)})
+})
 
 ////////////////////////////////////// LOGS //////////////////////////////////////
 
