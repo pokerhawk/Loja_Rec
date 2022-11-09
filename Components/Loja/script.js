@@ -8,18 +8,20 @@ const atualizarProdutos = async () => {
   const response = await fetch("http:/localhost:3000/produtos");
   const result = await response.json();
   for (i in result) {
-    const produtos = document.getElementById("produtos");
-    const li = document.createElement("li");
-    const text = document.createTextNode(
-      `Qnt:${result[i].quantidade} - ${result[i].produto} || ${result[i].preco}R$`
-    );
-    li.appendChild(text);
-    produtos.appendChild(li);
+    if(result[i].quantidade != 0){
+      const produtos = document.getElementById("produtos");
+      const li = document.createElement("li");
+      const text = document.createTextNode(
+        `Qnt:${result[i].quantidade} - ${result[i].produto} || ${result[i].preco}R$`
+      );
+      li.appendChild(text);
+      produtos.appendChild(li);
+    }
   }
 };
 atualizarProdutos();
 
-const atualizarCarrinhoBtn = async () => {
+const adicionarCarrinhoBtn = async () => {
   let selectProduto = document.getElementById("produto_select").value;
   let quantidade_produto = document.getElementById("quantidade_produto").value;
   const carrinho = document.querySelector("#carrinho");
@@ -27,7 +29,7 @@ const atualizarCarrinhoBtn = async () => {
   const produtosDB_result = await produtosDB.json();
   for (i in produtosDB_result) {
     if (produtosDB_result[i].produto == selectProduto) {
-      if (quantidade_produto <= produtosDB_result[i].quantidade) {
+      if (quantidade_produto <= produtosDB_result[i].quantidade && quantidade_produto != 0) {
         if (document.getElementsByClassName("itemLista").length == 0) {
           const itemLista = document.createElement("p");
           itemLista.setAttribute("class", "itemLista");
@@ -43,7 +45,9 @@ const atualizarCarrinhoBtn = async () => {
             j++
           ) {
             const itens = document.getElementsByClassName("itemLista").item(j);
-            const oldProduto = itens.innerText.split(" ")[1];
+            const oldProdutoArr = itens.innerText.split(" ");
+            oldProdutoArr.shift();
+            const oldProduto = oldProdutoArr.toString().replace(/,/gi, ' ');
             let verificaNumero = Number(itens.innerText.split(" ")[0]);
             let adicionaValor = verificaNumero + Number(quantidade_produto);
             if (
@@ -109,7 +113,9 @@ const efetuarCompraBtn = async () => {
     j++
   ) {
     const itens = document.getElementsByClassName("itemLista").item(j);
-    const item = itens.innerText.split(" ")[1];
+    const itemArr = itens.innerText.split(" ");
+    itemArr.shift();
+    const item = itemArr.toString().replace(/,/gi, ' ');
     const quantidade = itens.innerText.split(" ")[0];
     for (i in produtosDB_result) {
       if (item == produtosDB_result[i].produto) {
@@ -139,7 +145,9 @@ const efetuarCompraBtn = async () => {
         j++
       ) {
         const itens = document.getElementsByClassName("itemLista").item(j);
-        const item = itens.innerText.split(" ")[1];
+        const itemArr = itens.innerText.split(" ");
+        itemArr.shift();
+        const item = itemArr.toString().replace(/,/gi, ' ');
         const quantidade = Number(itens.innerText.split(" ")[0]);
         let dbContador = 0;
         for (k in produtosDB_result) {
@@ -169,6 +177,8 @@ const efetuarCompraBtn = async () => {
   removerProdutos();
   atualizarProdutos();
   removerCarrinhoBtn();
+  document.getElementById("produto_select").innerHTML = '';
+  fillSelect();
 };
 
 const adicionarDivida = async (Usuario) => {
@@ -227,7 +237,9 @@ const reconhecimentoFacialBtn = async () => {
     j++
   ) {
     const itens = document.getElementsByClassName("itemLista").item(j);
-    const item = itens.innerText.split(" ")[1];
+    const itemArr = itens.innerText.split(" ");
+    itemArr.shift();
+    const item = itemArr.toString().replace(/,/gi, ' ');
     const quantidade = itens.innerText.split(" ")[0];
     for (i in produtosDB_result) {
       if (item == produtosDB_result[i].produto) {
@@ -257,7 +269,9 @@ const reconhecimentoFacialBtn = async () => {
         j++
       ) {
         const itens = document.getElementsByClassName("itemLista").item(j);
-        const item = itens.innerText.split(" ")[1];
+        const itemArr = itens.innerText.split(" ");
+        itemArr.shift();
+        const item = itemArr.toString().replace(/,/gi, ' ');
         const quantidade = Number(itens.innerText.split(" ")[0]);
         let dbContador = 0;
         for (k in produtosDB_result) {
@@ -310,7 +324,7 @@ document
   .getElementById("quantidade_produto")
   .addEventListener("keydown", (event) => {
     if (event.key == "Enter") {
-      atualizarCarrinhoBtn();
+      adicionarCarrinhoBtn();
     }
   });
 
@@ -329,10 +343,12 @@ const fillSelect = async () =>{
   const select = document.getElementById("produto_select");
   const result = await (await fetch("http:/localhost:3000/produtos")).json();
   for(i in result){
-    const option = document.createElement("option");
-    option.setAttribute("value", result[i].produto);
-    option.innerText = result[i].produto;
-    select.appendChild(option);
+    if(result[i].quantidade != 0){
+      const option = document.createElement("option");
+      option.setAttribute("value", result[i].produto);
+      option.innerText = result[i].produto;
+      select.appendChild(option);
+    }
   }
 }
 fillSelect();

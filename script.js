@@ -5,12 +5,15 @@ const logar = async () => {
   const senha = document.getElementById("senha").value;
   const response = await (await fetch("http:/localhost:3000/usuarios")).json();
   for (i in response) {
+    let val = true;
     if (
       conferePessoa == response[i].login ||
       (response[i].login == login && response[i].senha == senha)
     ) {
+      val = false;
       location.href = "./Components/Loja/index.html";
-    } else {
+    }
+    if(i == response.length-1 && val) {
       alert("Usuário e senha errados ou inexistentes")
       break;
     }

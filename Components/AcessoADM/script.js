@@ -254,6 +254,25 @@ async function mostrarProdutos() {
   console.log(result)
 }
 
+async function delListaPedidos() {
+  const result = await ( await fetch("http:/localhost:3000/deletarListaPedidos",{
+    method: "delete",
+    headers: { "Content-Type": "application/json" }
+  })).json();
+  console.log(result);
+}
+
+function promptTest() {
+  const answer = prompt("Are you sure?")
+  if(answer.match(/^s\w*/gim)){
+    alert("yes")
+  } else if (answer.match(/^n\w*/gim)){
+    alert("no")
+  }else{
+    alert("yikes")
+  }
+}
+
 document
   .getElementById("delUsuario")
   .addEventListener("keydown", (event) => {
