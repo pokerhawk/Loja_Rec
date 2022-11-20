@@ -5,15 +5,14 @@ const logar = async () => {
   const senha = document.getElementById("senha").value;
   const response = await (await fetch("http:/localhost:3000/usuarios")).json();
   for (i in response) {
-    let val = true;
     if (
       conferePessoa == response[i].login ||
       (response[i].login == login && response[i].senha == senha)
     ) {
-      val = false;
       location.href = "./Components/Loja/index.html";
+      break;
     }
-    if(i == response.length-1 && val) {
+    if(i == response.length-1) {
       alert("Usuário e senha errados ou inexistentes")
       break;
     }
@@ -60,3 +59,14 @@ window.setInterval(async function () {
     novoRosto(result);
   }
 }, 1000);
+
+var video = document.querySelector("#videoElement");
+// if (navigator.mediaDevices.getUserMedia) { // stream video
+//   navigator.mediaDevices.getUserMedia({ video: true })
+//   .then(function (stream) {
+//     video.srcObject = stream;
+//   })
+//   .catch(function (err0r) {
+//     console.log("Something went wrong!");
+//   });
+// }
