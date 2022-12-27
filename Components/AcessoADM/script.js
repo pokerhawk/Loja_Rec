@@ -53,6 +53,7 @@ document
               if (id_pedido == result_produtos[k].ID) {
                 const pedidos = document.getElementById("pedidos");
                 const li = document.createElement("li");
+                li.setAttribute("class", "pedidoLista");
                 const text = document.createTextNode(
                   `${result_pedidos[i].usuario}: ${quant_pedido} ${
                     result_produtos[k].produto
@@ -74,6 +75,12 @@ document
     _button.setAttribute("onclick", "limparLista()");
     _button.innerHTML = "Limpar lista";
     listaPedidos.appendChild(_button);
+    const _2button = document.createElement("button");
+    _2button.setAttribute("id", "toDocument");
+    _2button.setAttribute("type", "button");
+    _2button.setAttribute("onclick", "toDocument()");
+    _2button.innerHTML = "Transformar em Documento";
+    listaPedidos.appendChild(_2button);
   }
 });
 
@@ -96,6 +103,7 @@ const addProduto = async () =>{
   } else {
     alert("Informações erradas")
   }
+  location.reload();
 }
 
 const attProduto = async () =>{
@@ -146,6 +154,7 @@ const attProduto = async () =>{
   } else {
     alert("Informações incorretas")
   }
+  location.reload();
 }
 
 const attDividaADM = async () =>{
@@ -162,6 +171,7 @@ const attDividaADM = async () =>{
   const result = await response.json()
   console.log(result)
   novaDivida.value = '';
+  location.reload();
 }
 
 const limparLista = () => {
@@ -174,6 +184,62 @@ const limparLista = () => {
   usuario.value = '';
   usuario.focus();
 };
+
+const toDocument = async () => {
+  // const result = await (await fetch("http:/localhost:3000/toDocument")).json(); DELETAR
+  let itensFinalArray = [];
+  for(
+    let j = 0;
+    j < document.getElementsByClassName("pedidoLista").length;
+    j++
+  ){
+    const itens = document.getElementsByClassName("pedidoLista").item(j);
+    const listaDividida = itens.innerText.split(": ");
+    const itensArray = [];
+    for(i in listaDividida){
+      if(i == 0 || i == 3){
+        itensArray.push(listaDividida[i])
+      }
+      if(i == 1 || i == 2){
+        itensArray.push(listaDividida[i].split(" || ")[0])
+      }
+    }
+    let quantidade = Number(itensArray[1].split(" ")[0]);
+    const produtoArrayName = itensArray[1].split(" ");
+    produtoArrayName.shift();
+    let produto = "";
+    for(i in produtoArrayName){
+      produto += `${produtoArrayName[i]} `;
+    }
+    let valor = Number(itensArray[2]);
+    let valorFinal = Number(quantidade*valor);
+    if(itensFinalArray.length == 0){
+      itensFinalArray.push({
+        quantidade: quantidade,
+        produto: produto,
+        valorUnitario: valor,
+        valorTotal: valorFinal
+      });
+    } else {
+      for(i in itensFinalArray){
+        if(itensFinalArray[i].produto == produto){
+          itensFinalArray[i].quantidade = Number(itensFinalArray[i].quantidade + quantidade);
+          itensFinalArray[i].valorTotal = Number(itensFinalArray[i].valorTotal + valorFinal);
+          break;
+        } else { // PAROU AQUI
+          itensFinalArray.push({
+            quantidade: quantidade,
+            produto: produto,
+            valorUnitario: valor,
+            valorTotal: valorFinal
+          });
+          break;
+        }
+      }
+    }
+  }
+  console.log(itensFinalArray)
+}
 
 const delListaUsuario = () =>{
   const listaUsuarios = document.getElementById("listaUsuarios");
@@ -196,6 +262,7 @@ const delUsuario = async () => {
   usuario.innerText = "";
   delListaUsuario();
   listaUsuarios();
+  location.reload();
 };
 
 const delProduto = async () =>{
@@ -208,6 +275,7 @@ const delProduto = async () =>{
     })
   })).json();
   console.log(result);
+  location.reload();
 }
 
 const fillSelect = async () =>{

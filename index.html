@@ -10,7 +10,8 @@
 </head>
 <body>
     <header>
-        <a href="./Components/Cadastro/index.html"><h1>Cadastrar-se</h1></a>
+        <button type="button" onclick="Cadastro()">Cadastrar-se</button>
+        <button type="button" onclick="logarADM()">Pagina de ADM</button>
     </header>
     <article>
         <main>
@@ -26,8 +27,6 @@
                     <input type="password" name="password" id="senha"/>
                     </div>
                     <input onclick="logar()" type="submit" value="Logar" id="button"/>
-                    ou
-                    <input onclick="logarADM()" type="submit" value="Logar como ADM" id="button"/>
                     <p id="pessoaReconhecida">Olá</p>
                 </fieldset>
             </div>

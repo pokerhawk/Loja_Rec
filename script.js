@@ -20,11 +20,12 @@ const logar = async () => {
 };
 
 const logarADM = async () => {
-  const senha = document.getElementById("senha").value;
+  const login = prompt("Usuário:");
+  const senha = prompt("Senha:");
   const response = await (await fetch("http:/localhost:3000/usuarios")).json();
   for (i in response) {
     if (
-      (response[i].login == "eliabe" && response[i].senha == senha) ||
+      (login == "eliabe" && response[i].login == "eliabe" && response[i].senha == senha) ||
       conferePessoa == "eliabe"
     ) {
       location.href = "./Components/AcessoADM/index.html";
@@ -50,6 +51,18 @@ const novoRosto = async (pessoa) => {
     }
   }
 };
+
+const Cadastro = () =>{
+  location.href = "./Components/Cadastro/index.html";
+}
+
+document
+  .getElementById("senha")
+  .addEventListener("keydown", (event) => {
+    if (event.key == "Enter") {
+      logar();
+    }
+  });
 
 window.setInterval(async function () {
   const response = await fetch("http:/localhost:3000/pessoaReconhecida");
